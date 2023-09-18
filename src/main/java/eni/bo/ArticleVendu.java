@@ -17,7 +17,6 @@ public class ArticleVendu {
 	
 	public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres,
 			LocalDate dateFinEncheres, int miseAPrix, int prixVente, Categorie categorieArticle) {
-		super();
 		this.noArticle = noArticle;
 		this.nomArticle = nomArticle;
 		this.description = description;
