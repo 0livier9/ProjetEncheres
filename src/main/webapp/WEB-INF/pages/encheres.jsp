@@ -4,7 +4,7 @@
 <main class="row">
 	<div class="col">
 		<div class="row text-center mt-4">
-			<h1> Liste de jeux </h1>
+			<h1> Liste des Enchères  </h1>
 		</div>
 		<div class="row mt-5">
 			<div class="col-8 offset-2">
@@ -29,7 +29,7 @@
 								<td>${ game.price }</td>
 								<td>
 									<a class="btn btn-dark" 
-										href="${ pageContext.request.contextPath }/jeux/détails?id=${ game.id }">
+										href="/jeux/détails?id=${ game.id }">
 										<i class="fa-solid fa-eye"></i>
 									</a> 
 								</td>

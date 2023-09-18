@@ -26,7 +26,7 @@ public class ListArticlesServlet extends HttpServlet {
 		}		
 		request.setAttribute("games", games);
 		request.setAttribute("annee", LocalDate.now().getYear());
-		request.getRequestDispatcher("/WEB-INF/pages/games.jsp")
+		request.getRequestDispatcher("/WEB-INF/pages/encheres.jsp")
 		       .forward(request, response);
 	}
 }

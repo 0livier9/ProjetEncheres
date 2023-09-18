@@ -12,30 +12,27 @@ import java.util.List;
 import eni.bo.ArticleVendu;
 import eni.dal.jdbc.ConnectionProvider;
 
-
 public class ArticlesDaoJdbcImpl implements ArticleDao {
 
 	// Requetes SQL
 	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS";
 	private static final String SELECT_ONE = "SELECT * FROM ARTICLES_VENDUS WHERE id = ?";
-	private static final String SAVE = "INSERT ARTICLES_VENDUS () VALUES (?,?,?,?,?,?,?,?)";
-	private static final String DELETE_ONE = "DELETE games WHERE id = ?";
-	private static final String UPDATE = "UPDATE games SET name=?,company=?,category=?,price=?,releaseDate=?,age=?,format=?,version=? WHERE id = ?";
-	private static final String FIND_BY_NAME = "SELECT * FROM games WHERE name LIKE ? ";
+	private static final String SAVE = "INSERT ARTICLES_VENDUS (nom_article,description,date_debut_encheres,date_fin_encheres,categorie) VALUES (?,?,?,?,?)";
+	private static final String DELETE_ONE = "DELETE ARTICLES_VENDUS WHERE id = ?";
+	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET nom_article=?,description=?,date_debut_encheres=?,date_fin_encheres=?,categorie=? WHERE id = ?";
+	private static final String FIND_BY_NAME = "SELECT * FROM ARTICLES_VENDUS WHERE nom_article LIKE ? ";
 
 	@Override
-	public void save(ArticleVendu game) {
+	public void save(ArticleVendu article) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SAVE);) {
-//			// valoriser les params de la requete
-//			pstmt.setString(1, game.getName());
-//			pstmt.setString(2, game.getCompany());
-//			pstmt.setString(3, game.getCategory());
-//			pstmt.setFloat(4, game.getPrice());
-//			pstmt.setDate(5, Date.valueOf(game.getReleaseDate()));
-//			pstmt.setInt(6, game.getAge());
-//			pstmt.setString(7, game.getFormat());
-//			pstmt.setString(8, game.getVersion());
+			// valoriser les params de la requete
+			pstmt.setString(1, article.getNomArticle());
+			pstmt.setString(2, article.getDescription());
+			pstmt.setDate(3, Date.valueOf(article.getDateDebutEncheres()));
+			pstmt.setDate(4, Date.valueOf(article.getDateFinEncheres()));
+			pstmt.setInt(5, (article.getMiseAPrix()));
+
 			// executer la requete
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -45,18 +42,16 @@ public class ArticlesDaoJdbcImpl implements ArticleDao {
 
 	@Override
 	public ArticleVendu findOne(int id) {
-		try(
-				Connection connection = ConnectionProvider.getConnection();
-				PreparedStatement pstmt = connection.prepareStatement(SELECT_ONE);
-			){
+		try (Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(SELECT_ONE);) {
 //			pstmt.setInt(1, id);			
 //			ResultSet rs =  pstmt.executeQuery();
 //			if(rs.next()) {
 //					return new ArticleVendu(rs.getString("noArticle"), FIND_BY_NAME, DELETE_ONE, null, null, id, id, null)				
 //			}			
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+		}
 		return null;
 	}
 
@@ -69,9 +64,10 @@ public class ArticlesDaoJdbcImpl implements ArticleDao {
 			while (rs.next()) {
 				articles.add(
 
-						new ArticleVendu(rs.getInt("no_articles"), rs.getString("nom_article"), rs.getString("description"),
-								rs.getDate("date_debut_encheres").toLocalDate(),
-								rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"), rs.getInt("prix_final"), null)
+						new ArticleVendu(rs.getInt("no_articles"), rs.getString("nom_article"),
+								rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
+								rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
+								rs.getInt("prix_final"), null)
 
 				);
 			}
@@ -138,10 +134,12 @@ public class ArticlesDaoJdbcImpl implements ArticleDao {
 //		} catch (SQLException e) {
 //			e.printStackTrace();
 //		}
-	
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}	return null;
 
-}}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+}

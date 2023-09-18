@@ -28,6 +28,12 @@ public class ArticleVendu {
 	}
 
 
+	public ArticleVendu(String nom, String description2, LocalDate dateDebutEnchere, LocalDate dateFinEnchere,
+			int prixIni, String cat) {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public int getNoArticle() {
 		return noArticle;
 	}
