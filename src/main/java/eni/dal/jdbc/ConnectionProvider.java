@@ -1,4 +1,4 @@
-package fr.eni.gamemanager.dal.jdbc;
+package eni.dal.jdbc;
 
 import java.sql.Connection;
 import java.sql.SQLException;

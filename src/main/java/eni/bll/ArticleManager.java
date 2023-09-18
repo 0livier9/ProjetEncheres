@@ -4,6 +4,7 @@ import java.util.List;
 
 import eni.bo.ArticleVendu;
 import eni.dal.ArticleDao;
+import eni.dal.DaoFactory;
 
 
 public class ArticleManager {
@@ -15,13 +16,13 @@ public class ArticleManager {
 		return instance;
 	}
 	// Fin Singleton
-	private ArticleDao ArticleDao = DaoFactory.getGameDao();
+	private ArticleDao ArticleDao = DaoFactory.getArticleDao();
 	// début la logique métier
-	public ArticleVendu recupUnJeu(int id) {
+	public ArticleVendu recupUnArticle(int id) {
 		return ArticleDao.findOne(id);
 	}
 	
-	public List<ArticleVendu> recupTousLesJeux() {
+	public List<ArticleVendu> recupTousLesArticles() {
 		return ArticleDao.findAll();
 	}
 	

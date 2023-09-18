@@ -8,7 +8,7 @@ public class DaoFactory {
 	
 	public static ArticleDao getArticleDao() {
 		//return new GameMockDaoImpl();
-		return new ArticleDaoJdbcImpl();
+		return new ArticlesDaoJdbcImpl();
 	} 
 	
 	public static UtilisateurDao getUtilisateurDao() {
