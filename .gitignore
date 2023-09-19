@@ -1,4 +1,8 @@
 .settings/
 .classpath
 .project
+<<<<<<< HEAD
 build/
+=======
+build/
+>>>>>>> eb1cd2cbb9553a278be5e698e9d10cd6820576a2
