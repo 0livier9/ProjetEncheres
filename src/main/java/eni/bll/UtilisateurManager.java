@@ -1,5 +1,7 @@
 package eni.bll;
 
+import org.apache.tomcat.jakartaee.commons.lang3.StringUtils;
+
 import eni.bll.exception.BLLException;
 import eni.bo.Utilisateur;
 import eni.dal.DaoFactory;
@@ -33,23 +35,28 @@ private static UtilisateurManager instance;
 		utilisateurDao.save(utilisateur);		
 	}
 	
-	private void checkFields(Utilisateur user) throws BLLException {
-		if( user == null ) throw new BLLException("User est null");
+	private void checkFields(Utilisateur utilisateur) throws BLLException {
+		if( utilisateur == null ) throw new BLLException("User est null");
 		
-		if( user.getPseudo().isBlank() ) throw new BLLException("Le champs pseudo est obligatoire!");
-		if( user.getNom().isBlank() ) throw new BLLException("Le champs nom est obligatoire!");
-		if( user.getPrenom().isBlank() ) throw new BLLException("Le champs prénom est obligatoire!");
-		if( user.getEmail().isBlank() ) throw new BLLException("Le champs email est obligatoire!");
-		if( user.getTelephone().isBlank() ) throw new BLLException("Le champs téléphone est obligatoire!");
-		if( user.getRue().isBlank() ) throw new BLLException("Le champs rue est obligatoire!");
-		if( user.getCodePostal().isBlank() ) throw new BLLException("Le champs code postal est obligatoire!");
-		if( user.getVille().isBlank() ) throw new BLLException("Le champs ville est obligatoire!");
+		if( utilisateur.getPseudo().isBlank() ) throw new BLLException("Le champs pseudo est obligatoire !");
+		if( utilisateur.getNom().isBlank() ) throw new BLLException("Le champs nom est obligatoire !");
+		if( utilisateur.getPrenom().isBlank() ) throw new BLLException("Le champs prénom est obligatoire !");
+		if( utilisateur.getEmail().isBlank() ) throw new BLLException("Le champs email est obligatoire !");
+		if( utilisateur.getTelephone().isBlank() ) throw new BLLException("Le champs téléphone est obligatoire !");
+		if( utilisateur.getRue().isBlank() ) throw new BLLException("Le champs rue est obligatoire !");
+		if( utilisateur.getCodePostal().isBlank() ) throw new BLLException("Le champs code postal est obligatoire !");
+		if( utilisateur.getVille().isBlank() ) throw new BLLException("Le champs ville est obligatoire !");
+		
+		if ( !StringUtils.isAlphanumeric(utilisateur.getPseudo())) throw new BLLException("Pas de charactères spéciaux merci !");
+		
 		
 		
 		// verifier la syntaxe de l'email
-		if( user.getMotDePasse().isBlank() ) throw new BLLException("Le champs mot de passe est obligatoire!");
-		if( user.getMotDePasse().length() < 8 ||  user.getMotDePasse().length() > 35 )throw new BLLException("La taille du mot de passe doit etre entre 8 et 35");
+		if( utilisateur.getMotDePasse().isBlank() ) throw new BLLException("Le champs mot de passe est obligatoire!");
+		if( utilisateur.getMotDePasse().length() < 8 ||  utilisateur.getMotDePasse().length() > 35 )throw new BLLException("La taille du mot de passe doit etre entre 8 et 35");
 		//if(!user.getPassword().equals(user.getConfirmpassword))
 	}
 
+
+	
 }

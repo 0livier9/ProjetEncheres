@@ -10,9 +10,9 @@ import eni.dal.jdbc.exception.JDBCException;
 
 public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 	
-	private static final String INSERT_USER = "INSERT INTO UTILISATEURS (pseudo,nom,prenom,email,telephone,rue,code_postal,ville,mot_de_passe,credit,administrateur) "
-			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-	private static final String UNIQUE_USERNAME_CONSTRAINT = "UQ_USERNAME_USERS";
+	private static final String INSERT_USER = "INSERT INTO UTILISATEURS (pseudo,nom,prenom,email,telephone,rue,code_postal,ville,mot_de_passe,credit,administrateur) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+	private static final String UNIQUE_PSEUDO_CONSTRAINT = "UQ_PSEUDO_UTILISATEURS";
+	private static final String UNIQUE_EMAIL_CONSTRAINT = "UQ_EMAIL_UTILISATEURS";
 	
 	
 	
@@ -24,15 +24,11 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 	}
 
 	@Override
-	public void save(Utilisateur utilisateur) throws eni.dal.jdbc.exception.JDBCException {
+	public void save(Utilisateur utilisateur) throws JDBCException {
 		try(
 				Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(INSERT_USER);
 					){
-			
-				System.out.println(utilisateur.getNom());
-				System.out.println(utilisateur.getCredit());
-				
 			
 				pstmt.setString(1, utilisateur.getPseudo());
 				pstmt.setString(2, utilisateur.getNom());
@@ -48,8 +44,11 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 				
 				pstmt.executeUpdate();
 			}catch(SQLException e) {
-				if(e.getMessage().contains(UNIQUE_USERNAME_CONSTRAINT)) {
-					throw new JDBCException("Le nom de l'utilisateur existe déja!");
+				if(e.getMessage().contains(UNIQUE_PSEUDO_CONSTRAINT)) {
+					throw new JDBCException("Ce pseudo existe déja!");
+				}
+				if(e.getMessage().contains(UNIQUE_EMAIL_CONSTRAINT)) {
+					throw new JDBCException("Ce mail existe déja!");
 				}
 				e.printStackTrace();
 			}

@@ -30,13 +30,11 @@ public class RegisterServlet extends HttpServlet {
 					, request.getParameter("rue"), request.getParameter("codePostal")
 					, request.getParameter("ville"), request.getParameter("motDePasse"));
 			
-			System.out.println(utilisateur);
-			
 			//user.setConfirmPassword()
 			UtilisateurManager.getInstance().inscription(utilisateur);
 			// Flash
 			request.getSession().setAttribute("success", "Le compte a bien été créer!");
-			response.sendRedirect( request.getContextPath()+ "/inscription");
+			response.sendRedirect( request.getContextPath()+ "/eni-enchere");
 		} catch (JDBCException | BLLException e) {
 			
 			request.setAttribute("error", e.getMessage());
