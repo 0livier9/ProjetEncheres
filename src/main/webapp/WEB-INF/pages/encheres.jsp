@@ -20,13 +20,13 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="game" items="${ games }" >
+						<c:forEach var="article" items="${ encheres }" >
 							<tr>
-								<td>${ game.id }</td>
-								<td>${ game.name }</td>
-								<td>${ game.company }</td>
-								<td>${ game.category }</td>
-								<td>${ game.price }</td>
+								
+								<td>${ enchere.noUser }</td>
+								<td>${ enchere.noArticle }</td>
+								<td>${ enchere.dateEnchere }</td>
+								<td>${ enchere.montantEnchere }</td>
 								<td>
 									<a class="btn btn-dark" 
 										href="/jeux/détails?id=${ game.id }">
