@@ -1,4 +1,5 @@
 package eni.dal.jdbc;
+
 import eni.dal.jdbc.*;
 import eni.dal.*;
 import java.sql.Connection;
@@ -11,14 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eni.bo.ArticleVendu;
+import eni.bo.Categorie;
 import eni.bo.Enchere;
-
+import eni.bo.Utilisateur;
 import eni.dal.EnchereDao;
 
 public class EnchereDaoJdbcImpl implements EnchereDao {
 
 	// Requetes SQL
-	private static final String SELECT_ALL = "SELECT * FROM ENCHERES";
+	private static final String SELECT_ALL = "SELECT * FROM ENCHERES INNER JOIN ARTICLES_VENDUS ON ENCHERES.no_article = ARTICLES_VENDUS.no_article \r\n"
+			+ "INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN  UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur=UTILISATEURS.no_utilisateur;";
 	private static final String SELECT_ONE = "SELECT * FROM ENCHERES WHERE id = ?";
 	private static final String SAVE = "INSERT ARTICLES_VENDUS (no_utilisateur,no_article,date_enchere,montant_enchere) VALUES (?,?,?,?,?)";
 	private static final String DELETE_ONE = "DELETE ENCHERES WHERE id = ?";
@@ -26,14 +29,11 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	private static final String FIND_BY_NAME = "SELECT * FROM ENCHERES WHERE no_article LIKE ? ";
 
 	@Override
-	public void save(Enchere enchere) {
+	public void save(ArticleVendu article) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SAVE);) {
 			// valoriser les params de la requete
-			pstmt.setString(1, enchere.getArticle().toString());
-			pstmt.setDate(3, Date.valueOf(enchere.getDateEnchere()));
-			pstmt.setInt(5, (enchere.getMontantEnchere()));
-
+		
 			// executer la requete
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -63,10 +63,22 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 			List<Enchere> encheres = new ArrayList<Enchere>();
 			ResultSet rs = stmt.executeQuery(SELECT_ALL);
 			while (rs.next()) {
+				Utilisateur user = new Utilisateur(rs.getString("pseudo"), rs.getString("nom"), rs.getString("prenom"),
+						rs.getString("email"), rs.getString("telephone"), rs.getString("rue"),
+						rs.getString("code_postal"), rs.getString("ville"), rs.getString("mot_de_passe"));
+				
+				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
+
+				ArticleVendu article = new ArticleVendu( rs.getString("nom_article"),
+						rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
+						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"), user, categorie);
+
+				article.setUser(user);
+				article.setCategorie(categorie);
 				encheres.add(
 
-						new Enchere(rs.getInt("no_utilisateur"), rs.getInt("no_article"),
-								rs.getDate("date_enchere").toLocalDate(), rs.getInt("montant_enchere")
+						new Enchere(user, article, rs.getDate("date_enchere").toLocalDate(),
+								rs.getInt("montant_enchere")
 
 						));
 			}
