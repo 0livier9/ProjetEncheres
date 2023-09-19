@@ -3,79 +3,57 @@ package eni.bo;
 import java.time.LocalDate;
 
 public class Enchere {
-	
+
 	private ArticleVendu article;
 	private Utilisateur user;
+
 	private LocalDate dateEnchere;
 	private int montantEnchere;
-	private int noUser = user.getNoUtilisateur();
-	private int noArticle = article.getNoArticle();
-	
-	
-	public Enchere(int noUser,int noArticle ,LocalDate dateEnchere, int montantEnchere 
-			) {
-		super();
+
+	public Utilisateur getUser() {
+		return user;
+	}
+
+	public void setUser(Utilisateur user) {
+		this.user = user;
+	}
+
+	public Enchere(Utilisateur user, ArticleVendu article, LocalDate dateEnchere, int montantEnchere) {
+		this.user = user;
 		this.dateEnchere = dateEnchere;
 		this.montantEnchere = montantEnchere;
-		this.noUser = noUser;
-		this.noArticle = noArticle;
+		this.article = article;
+		// TODO Auto-generated constructor stub
 	}
-	
-	
+
+	public Enchere(ArticleVendu article, Utilisateur user) {
+
+		this.article = article;
+		this.user = user;
+	}
+
 	public ArticleVendu getArticle() {
 		return article;
 	}
-
 
 	public void setArticle(ArticleVendu article) {
 		this.article = article;
 	}
 
-
-
-
 	public LocalDate getDateEnchere() {
 		return dateEnchere;
 	}
-
 
 	public void setDateEnchere(LocalDate dateEnchere) {
 		this.dateEnchere = dateEnchere;
 	}
 
-
 	public int getMontantEnchere() {
 		return montantEnchere;
 	}
-
 
 	public void setMontantEnchere(int montantEnchere) {
 		this.montantEnchere = montantEnchere;
 	}
 
-
-	public int getNoUser() {
-		return noUser;
-	}
-
-
-	public void setNoUser(int noUser) {
-		this.noUser = noUser;
-	}
-
-
-	public int getNoArticle() {
-		return noArticle;
-	}
-
-
-	public void setNoArticle(int noArticle) {
-		this.noArticle = noArticle;
-	}
-
-
-	
-	
-
-	
 }

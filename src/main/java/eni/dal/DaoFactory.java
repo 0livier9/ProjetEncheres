@@ -2,6 +2,8 @@ package eni.dal;
 
 import eni.dal.jdbc.EnchereDaoJdbcImpl;
 import eni.dal.jdbc.UtilisateurDaoJdbcImpl;
+import eni.dal.UtilisateurDao;
+
 
 
 public class DaoFactory {
