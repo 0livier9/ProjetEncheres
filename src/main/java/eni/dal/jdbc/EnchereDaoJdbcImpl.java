@@ -1,5 +1,6 @@
 package eni.dal.jdbc;
-
+import eni.dal.jdbc.*;
+import eni.dal.*;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
