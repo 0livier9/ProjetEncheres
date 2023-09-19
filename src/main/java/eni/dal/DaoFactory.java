@@ -1,4 +1,6 @@
 package eni.dal;
+
+import eni.dal.jdbc.EnchereDaoJdbcImpl;
 import eni.dal.jdbc.UtilisateurDaoJdbcImpl;
 
 
@@ -6,9 +8,9 @@ public class DaoFactory {
 
 	private DaoFactory() {}
 	
-	public static ArticleDao getArticleDao() {
+	public static EnchereDao getEnchereDao() {
 		//return new GameMockDaoImpl();
-		return new ArticlesDaoJdbcImpl();
+		return new EnchereDaoJdbcImpl();
 	} 
 	
 	public static UtilisateurDao getUtilisateurDao() {

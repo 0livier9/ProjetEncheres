@@ -1,4 +1,4 @@
-package eni.dal;
+package eni.dal.jdbc;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -10,28 +10,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eni.bo.ArticleVendu;
-import eni.dal.jdbc.ConnectionProvider;
+import eni.bo.Enchere;
 
-public class ArticlesDaoJdbcImpl implements ArticleDao {
+import eni.dal.EnchereDao;
+
+public class EnchereDaoJdbcImpl implements EnchereDao {
 
 	// Requetes SQL
-	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS";
-	private static final String SELECT_ONE = "SELECT * FROM ARTICLES_VENDUS WHERE id = ?";
-	private static final String SAVE = "INSERT ARTICLES_VENDUS (nom_article,description,date_debut_encheres,date_fin_encheres,categorie) VALUES (?,?,?,?,?)";
-	private static final String DELETE_ONE = "DELETE ARTICLES_VENDUS WHERE id = ?";
-	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET nom_article=?,description=?,date_debut_encheres=?,date_fin_encheres=?,categorie=? WHERE id = ?";
-	private static final String FIND_BY_NAME = "SELECT * FROM ARTICLES_VENDUS WHERE nom_article LIKE ? ";
+	private static final String SELECT_ALL = "SELECT * FROM ENCHERES";
+	private static final String SELECT_ONE = "SELECT * FROM ENCHERES WHERE id = ?";
+	private static final String SAVE = "INSERT ARTICLES_VENDUS (no_utilisateur,no_article,date_enchere,montant_enchere) VALUES (?,?,?,?,?)";
+	private static final String DELETE_ONE = "DELETE ENCHERES WHERE id = ?";
+	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET no_utilisateur=?,no_article=?,date_enchere=?,montant_enchere=? WHERE id = ?";
+	private static final String FIND_BY_NAME = "SELECT * FROM ENCHERES WHERE no_article LIKE ? ";
 
 	@Override
-	public void save(ArticleVendu article) {
+	public void save(Enchere enchere) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SAVE);) {
 			// valoriser les params de la requete
-			pstmt.setString(1, article.getNomArticle());
-			pstmt.setString(2, article.getDescription());
-			pstmt.setDate(3, Date.valueOf(article.getDateDebutEncheres()));
-			pstmt.setDate(4, Date.valueOf(article.getDateFinEncheres()));
-			pstmt.setInt(5, (article.getMiseAPrix()));
+			pstmt.setString(1, enchere.getArticle().toString());
+			pstmt.setDate(3, Date.valueOf(enchere.getDateEnchere()));
+			pstmt.setInt(5, (enchere.getMontantEnchere()));
 
 			// executer la requete
 			pstmt.executeUpdate();
@@ -41,7 +41,7 @@ public class ArticlesDaoJdbcImpl implements ArticleDao {
 	}
 
 	@Override
-	public ArticleVendu findOne(int id) {
+	public Enchere findOne(int id) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SELECT_ONE);) {
 //			pstmt.setInt(1, id);			
@@ -56,22 +56,20 @@ public class ArticlesDaoJdbcImpl implements ArticleDao {
 	}
 
 	@Override
-	public List<ArticleVendu> findAll() {
+	public List<Enchere> findAll() {
 		try (Connection connection = ConnectionProvider.getConnection();
 				Statement stmt = connection.createStatement();) {
-			List<ArticleVendu> articles = new ArrayList<ArticleVendu>();
+			List<Enchere> encheres = new ArrayList<Enchere>();
 			ResultSet rs = stmt.executeQuery(SELECT_ALL);
 			while (rs.next()) {
-				articles.add(
+				encheres.add(
 
-						new ArticleVendu(rs.getInt("no_articles"), rs.getString("nom_article"),
-								rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
-								rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
-								rs.getInt("prix_final"), null)
+						new Enchere(rs.getInt("no_utilisateur"), rs.getInt("no_article"),
+								rs.getDate("date_enchere").toLocalDate(), rs.getInt("montant_enchere")
 
-				);
+						));
 			}
-			return articles;
+			return encheres;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -79,7 +77,7 @@ public class ArticlesDaoJdbcImpl implements ArticleDao {
 	}
 
 	@Override
-	public void modify(ArticleVendu game) {
+	public void modify(Enchere enchere) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(UPDATE)) {
 
@@ -115,7 +113,7 @@ public class ArticlesDaoJdbcImpl implements ArticleDao {
 	}
 
 	@Override
-	public List<ArticleVendu> findByName(String query) {
+	public List<Enchere> findByName(String query) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_NAME)) {
 ////			pstmt.setString(1, "%" + query + "%");

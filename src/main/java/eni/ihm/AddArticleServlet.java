@@ -32,15 +32,16 @@ public class AddArticleServlet extends HttpServlet {
 			LocalDate dateDebutEnchere =  LocalDate.parse(request.getParameter("date_debut_encheres")) ;
 			LocalDate dateFinEnchere =  LocalDate.parse(request.getParameter("date_fin_encheres")) ;
 			int prixIni =  Integer.parseInt(request.getParameter("prix_initial")) ;
-			int prixFinal =  Integer.parseInt(request.getParameter("prix_vente")) ;
+			//int prixFinal =  Integer.parseInt(request.getParameter("prix_vente")) ;
+			
 	
 			// create Article instance
-			ArticleVendu article = new ArticleVendu( prixFinal, nom, description, dateDebutEnchere, dateFinEnchere, prixIni, prixFinal, null );
+			ArticleVendu article = new ArticleVendu(  nom, description, dateDebutEnchere, dateFinEnchere, prixIni );
 			
 			// Add
-			ArticleManager.getInstance().ajouterUnJeu(article);
+			ArticleManager.getInstance().ajouterUnArticle(article);
 			// redirect
-			response.sendRedirect( request.getContextPath() +"/encheres");
+			response.sendRedirect( request.getContextPath() +"/encheres.jsp");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

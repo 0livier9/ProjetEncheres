@@ -1,6 +1,7 @@
 package eni.bo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ArticleVendu {
 
@@ -11,32 +12,49 @@ public class ArticleVendu {
 	private LocalDate dateFinEncheres;
 	private int miseAPrix;
 	private int prixVente;
-	private Categorie categorieArticle;
+	private Categorie categorie;
 	private Retrait lieuRetrait;
+	private int noCategorie = categorie.getNoCategorie();
 	
+	private List<Enchere> encheres;
 	
-	public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres,
-			LocalDate dateFinEncheres, int miseAPrix, int prixVente, Categorie categorieArticle) {
+
+
+	public int getNoCategorie() {
+		return noCategorie;
+	}
+
+
+
+
+
+	public void setNoCategorie(int noCategorie) {
+		this.noCategorie = noCategorie;
+	}
+
+
+
+
+
+	public ArticleVendu(int noArticle,String nomArticle, String description, LocalDate dateDebutEncheres,
+			LocalDate dateFinEncheres, int miseAPrix, int noCategorie) {
 		this.noArticle = noArticle;
 		this.nomArticle = nomArticle;
 		this.description = description;
 		this.dateDebutEncheres = dateDebutEncheres;
 		this.dateFinEncheres = dateFinEncheres;
 		this.miseAPrix = miseAPrix;
-		this.prixVente = prixVente;
-		this.categorieArticle = categorieArticle;
+		this.noCategorie = noCategorie;
 	}
 
 
-	public ArticleVendu(String nom, String description2, LocalDate dateDebutEnchere, LocalDate dateFinEnchere,
-			int prixIni, String cat) {
-		// TODO Auto-generated constructor stub
-	}
+
 
 
 	public int getNoArticle() {
 		return noArticle;
 	}
+
 
 
 	public void setNoArticle(int noArticle) {
@@ -103,16 +121,16 @@ public class ArticleVendu {
 		this.prixVente = prixVente;
 	}
 
-
-	public Categorie getCategorieArticle() {
-		return categorieArticle;
-	}
-
-
-	public void setCategorieArticle(Categorie categorieArticle) {
-		this.categorieArticle = categorieArticle;
-	}
 	
+//	public Categorie getCategorieArticle() {
+//		return categorie;
+//	}
+//
+//
+//	public void setCategorieArticle(Categorie categorie) {
+//		this.categorie = categorie;
+//	}
+//	
 	
 	
 }
