@@ -25,11 +25,11 @@
 				</c:if>
 				<form method="post" >
 					<div class="mb-3">
-					  <label for="username" class="form-label">Username</label>
-					  <input type="text" class="form-control" name="username" id="username" placeholder="ex. toto">
+					  <label for="pseudoOrEmail" class="form-label">Login (Pseudo ou Email)</label>
+					  <input type="text" class="form-control" name="pseudoOrEmail" id="pseudoOrEmail" placeholder="ex. toto">
 					</div>
 					<div class="mb-3">
-					  <label for="password" class="form-label">Password</label>
+					  <label for="password" class="form-label">Mot de passe</label>
 					  <input type="password" class="form-control" name="password" id="password" >
 					</div>
 					<div class="mb-3">

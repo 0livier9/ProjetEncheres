@@ -27,9 +27,9 @@
 			          <a class="nav-link" href="${ pageContext.request.contextPath }/articles/ajouter">Ajouter un article</a>
 			        </li>
 			        <li class="nav-item">
-			          <a class="nav-link" href="${ pageContext.request.contextPath }/articles">Liste des enchères</a>
+			          <a class="nav-link" href="${ pageContext.request.contextPath }/eni-enchere">Liste des enchères</a>
 			        </li>
-			        <c:if test="${ user == null }">			        
+			        <c:if test="${ utilisateur == null }">			        
 				        <li class="nav-item">
 				          <a class="nav-link" href="${ pageContext.request.contextPath }/connexion">Connexion</a>
 				        </li>	
@@ -37,9 +37,14 @@
 				          <a class="nav-link" href="${ pageContext.request.contextPath }/inscription">Inscription</a>
 				        </li>	
 			        </c:if>
-			        <c:if test="${ user != null }">	
+			     <%--  <c:if test="${ utilisateur != null }"> --%>
     				    <li class="nav-item">
-				          <a class="nav-link" href="${ pageContext.request.contextPath }/deconnexion">Déconnexion</a>
+				          <a class="nav-link" href="${ pageContext.request.contextPath }/profil">Mon profil</a>
+				        </li>
+			    <%--   </c:if> --%>
+			        <c:if test="${ utilisateur != null }">	
+    				    <li class="nav-item">
+				          <a class="nav-link" href="${ pageContext.request.contextPath }/eni-enchere">Déconnexion</a>
 				        </li>
 			        </c:if>
 			      </ul>

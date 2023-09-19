@@ -2,6 +2,7 @@ package eni.dal.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import eni.bo.Utilisateur;
@@ -13,15 +14,8 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 	private static final String INSERT_USER = "INSERT INTO UTILISATEURS (pseudo,nom,prenom,email,telephone,rue,code_postal,ville,mot_de_passe,credit,administrateur) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String UNIQUE_PSEUDO_CONSTRAINT = "UQ_PSEUDO_UTILISATEURS";
 	private static final String UNIQUE_EMAIL_CONSTRAINT = "UQ_EMAIL_UTILISATEURS";
-	
-	
-	
-	
-	@Override
-	public Utilisateur findByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	private static final String SELECT_BY_EMAIL = "SELECT * FROM UTILISATEURS WHERE email = ?";
+	private static final String SELECT_BY_PSEUDO = "SELECT * FROM UTILISATEURS WHERE pseudo = ?";
 
 	@Override
 	public void save(Utilisateur utilisateur) throws JDBCException {
@@ -54,17 +48,69 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 			}
 		}
 
-
 	@Override
-	public void update(Utilisateur user) {
-		// TODO Auto-generated method stub
-		
-	}
+	public Utilisateur findByEmail(String pseudoOrEmail) {
+		try(
+				Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(SELECT_BY_EMAIL);
+					){
 
-	@Override
-	public Utilisateur findByEmail(String email) {
-		// TODO Auto-generated method stub
+				pstmt.setString(1, pseudoOrEmail);				
+				ResultSet rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					return new Utilisateur(rs.getInt("no_utilisateur"),
+							rs.getString("pseudo"), 
+							rs.getString("nom"), 
+							rs.getString("prenom"),
+							rs.getString("email"),
+							rs.getString("telephone"),
+							rs.getString("rue"),
+							rs.getString("code_postal"),
+							rs.getString("ville"),
+							rs.getString("mot_de_passe"),
+							rs.getInt("credit"),
+							rs.getBoolean("administrateur")
+							);
+				}
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
 		return null;
 	}
+
+	@Override
+	public Utilisateur findByPseudo(String pseudoOrEmail) {
+		try(
+				Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(SELECT_BY_PSEUDO);
+					){
+
+				pstmt.setString(1, pseudoOrEmail);				
+				ResultSet rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					return new Utilisateur(rs.getInt("no_utilisateur"),
+							rs.getString("pseudo"), 
+							rs.getString("nom"), 
+							rs.getString("prenom"),
+							rs.getString("email"),
+							rs.getString("telephone"),
+							rs.getString("rue"),
+							rs.getString("code_postal"),
+							rs.getString("ville"),
+							rs.getString("mot_de_passe"),
+							rs.getInt("credit"),
+							rs.getBoolean("administrateur")
+							);
+				}
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+	
+
+	
 
 }

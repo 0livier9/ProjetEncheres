@@ -57,6 +57,22 @@ private static UtilisateurManager instance;
 		//if(!user.getPassword().equals(user.getConfirmpassword))
 	}
 
+	public Utilisateur login(String pseudoOrEmail,String password) {	
+		
+		Utilisateur utilisateur;
+		
+		if (pseudoOrEmail.contains("@")) {
+			
+			utilisateur = utilisateurDao.findByEmail(pseudoOrEmail);		
+			
+		}else {
+			utilisateur = utilisateurDao.findByPseudo(pseudoOrEmail);
+		}
 
+		if(utilisateur!=null && PasswordEncoder.verifyPassword(password, utilisateur.getMotDePasse()) ) {
+			return utilisateur;
+		}		
+		return null;
+	}
 	
 }

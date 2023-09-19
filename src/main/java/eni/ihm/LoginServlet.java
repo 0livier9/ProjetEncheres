@@ -24,23 +24,20 @@ public class LoginServlet extends HttpServlet {
 		request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username = request.getParameter("username");
+		String pseudoOrEmail = request.getParameter("pseudoOrEmail");
 		String password = request.getParameter("password");
 		
-		Utilisateur user = UtilisateurManager.getInstance().login(username, password);
-		
-		if(user == null) {
-			request.setAttribute("error", "Username ou le mot de passe est éronné");
+		Utilisateur utilisateur = UtilisateurManager.getInstance().login(pseudoOrEmail, password);
+			
+		if (utilisateur == null) {
+			request.setAttribute("error", "Le login ou le mot de passe est éronné");
 			doGet(request, response);
 		}else {
 			HttpSession session = request.getSession();
-			user.setPassword("");
-			session.setAttribute("user", user);
-			response.sendRedirect(request.getContextPath()+"/jeux/ajouter");
+			utilisateur.setMotDePasse("");
+			session.setAttribute("utilisateur", utilisateur);
+			response.sendRedirect(request.getContextPath()+"/eni-enchere");
 		}
 		
 	}

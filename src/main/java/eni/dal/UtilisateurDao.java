@@ -5,8 +5,7 @@ import eni.dal.jdbc.exception.JDBCException;
 
 public interface UtilisateurDao {
 
-	Utilisateur findByUsername(String username);
-	void save(Utilisateur user) throws JDBCException;
-	void update(Utilisateur user);
+	void save(Utilisateur utilisateur) throws JDBCException;
 	Utilisateur findByEmail(String email);
+	Utilisateur findByPseudo(String pseudoOrEmail);
 }
