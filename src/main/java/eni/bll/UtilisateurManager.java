@@ -1,6 +1,10 @@
 package eni.bll;
 
+import java.rmi.ServerException;
+
 import org.apache.tomcat.jakartaee.commons.lang3.StringUtils;
+
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import eni.bll.exception.BLLException;
 import eni.bo.Utilisateur;
@@ -22,7 +26,7 @@ private static UtilisateurManager instance;
 	
 	private UtilisateurDao utilisateurDao = DaoFactory.getUtilisateurDao();
 	
-	public void inscription(Utilisateur utilisateur) throws JDBCException, BLLException {
+	public void inscription(Utilisateur utilisateur) throws JDBCException, BLLException, SQLServerException {
 		// validation !!!!!!!!
 		checkFields(utilisateur);
 		utilisateur.setMotDePasse( PasswordEncoder.hashPassword(
@@ -75,4 +79,13 @@ private static UtilisateurManager instance;
 		return null;
 	}
 	
+	public void supprimerUnUtilisateur(String pseudo, String motDePasse) {
+		Utilisateur utilisateur = utilisateurDao.findByPseudo(pseudo);
+		
+		
+		
+		if (PasswordEncoder.verifyPassword(motDePasse, utilisateur.getMotDePasse())) {
+			utilisateurDao.remove(pseudo);
+		}
+	}
 }

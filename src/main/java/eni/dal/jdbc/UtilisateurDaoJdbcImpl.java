@@ -16,6 +16,7 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 	private static final String UNIQUE_EMAIL_CONSTRAINT = "UQ_EMAIL_UTILISATEURS";
 	private static final String SELECT_BY_EMAIL = "SELECT * FROM UTILISATEURS WHERE email = ?";
 	private static final String SELECT_BY_PSEUDO = "SELECT * FROM UTILISATEURS WHERE pseudo = ?";
+	private static final String DELETE_USER = "DELETE UTILISATEURS WHERE pseudo = ?";
 
 	@Override
 	public void save(Utilisateur utilisateur) throws JDBCException {
@@ -44,7 +45,6 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 				if(e.getMessage().contains(UNIQUE_EMAIL_CONSTRAINT)) {
 					throw new JDBCException("Ce mail existe déja!");
 				}
-				e.printStackTrace();
 			}
 		}
 
@@ -108,6 +108,20 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 				e.printStackTrace();
 			}
 		return null;
+	}
+
+	@Override
+	public void remove(String pseudo) {
+		try (
+				Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(DELETE_USER);	
+			) {
+			pstmt.setString(1, pseudo);
+			pstmt.executeUpdate();
+		}catch( SQLException e ) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 

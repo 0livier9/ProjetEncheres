@@ -12,24 +12,21 @@ import java.io.IOException;
 @WebServlet("/profil")
 public class ViewProfilServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-   
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		HttpSession session = request.getSession();
 		
 		if (session.getAttribute("utilisateur")!=null ){
-			request.getRequestDispatcher("/WEB-INF/pages/profil.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/pages/mon-profil.jsp").forward(request, response);
 		}else {
-			request.getRequestDispatcher("/WEB-INF/pages/utilisateur.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/pages/profil-des-autres.jsp").forward(request, response);
 		}
-		
-		
-		
-		
-//		
-//	
-//		
-	
 	}
-	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
+		
+		response.sendRedirect(request.getContextPath()+"/modification");
+
+	}
+
 }
