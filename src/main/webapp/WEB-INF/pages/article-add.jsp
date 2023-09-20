@@ -51,9 +51,9 @@
 						<fieldset>
 							<legend>Retrait</legend>
 							<label for="rue" class="form-label">rue</label> <input
-								type="text" value="${Rue}" class="form-control" name="rue" id="rue"> <label
+								type="text" value="${rue}" class="form-control" name="rue" id="rue"> <label
 								for="code_postal" class="form-label">Code Postal</label> <input
-								type="text" value="${codePostal}"
+								type="text" value="${code_postal}"
 								  class="form-control" name="code_postal"
 								id="code_postal"> <label for="ville" class="form-label">Ville</label>
 							<input type="text" value="${ville}" class="form-control" name="ville" id="ville">

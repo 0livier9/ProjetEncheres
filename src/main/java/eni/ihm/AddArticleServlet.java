@@ -26,36 +26,44 @@ public class AddArticleServlet extends HttpServlet {
 
 	// afficher la page d'ajout
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		HttpSession session = request.getSession();
+	        throws ServletException, IOException {
+	    HttpSession session = request.getSession();
 
-		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+	    Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 
-		String rue = utilisateur.getRue();
-		String codePostal = utilisateur.getCodePostal();
-		String ville = utilisateur.getVille();
-	
-		List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
+	    int noUtilisateur = utilisateur.getNoUtilisateur();  //  On récupérer le numéro de l'utilisateur
 
-		// Mettre les catégories dans la requête
-		request.setAttribute("categories", categories);
+	    String rue = utilisateur.getRue();
+	    String codePostal = utilisateur.getCodePostal();
+	    String ville = utilisateur.getVille();
 
-		request.setAttribute("rue", rue);
-		request.setAttribute("code_postal", codePostal);
-		request.setAttribute("ville", ville);
+	    List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
 
-		request.getRequestDispatcher("/WEB-INF/pages/article-add.jsp").forward(request, response);
+	    // On met  les catégories dans la requête
+	    request.setAttribute("categories", categories);
+
+	    request.setAttribute("rue", rue);
+	    request.setAttribute("code_postal", codePostal);
+	    request.setAttribute("ville", ville);
+
+	    // On met le numéro de l'utilisateur dans la requête
+	    request.setAttribute("no_utilisateur", noUtilisateur);
+
+	    request.getRequestDispatcher("/WEB-INF/pages/article-add.jsp").forward(request, response);
 	}
+
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
 			// get data from param
+		    HttpSession session = request.getSession();
+	        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+	        int noUtilisateur = utilisateur.getNoUtilisateur();
+	        
 			Categorie categorie = new Categorie();
 
-			HttpSession session = request.getSession();
-			int noUtilisateur = (int) session.getAttribute("no_utilisateur");
-
+			System.out.println(noUtilisateur);
 			String nom = request.getParameter("nom_article");
 			String description = request.getParameter("description");
 			LocalDate dateDebutEnchere = LocalDate.parse(request.getParameter("date_fin_encheres"));
@@ -67,7 +75,7 @@ public class AddArticleServlet extends HttpServlet {
 			// create Article instance
 			ArticleVendu article = new ArticleVendu(nom, description, dateDebutEnchere, dateFinEnchere, prixInitial, 0,
 					noUtilisateur, noCategorie, etatVente);
-			// Add
+			// Add 
 			ArticleVenduManager.getInstance().ajouterUneVente(article);
 			// redirect
 
