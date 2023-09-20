@@ -27,15 +27,22 @@ public class RegisterServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			Utilisateur utilisateur = new Utilisateur(request.getParameter("pseudo"), request.getParameter("nom"),
+			
+			String pseudo = request.getParameter("pseudo");
+			String motDePasse = request.getParameter("motDePasse");
+			
+			Utilisateur utilisateur = new Utilisateur(pseudo, request.getParameter("nom"),
 					request.getParameter("prenom"), request.getParameter("email"), request.getParameter("telephone"),
 					request.getParameter("rue"), request.getParameter("codePostal"), request.getParameter("ville"),
-					request.getParameter("motDePasse"));
+					motDePasse);
 
 			// user.setConfirmPassword()
 			UtilisateurManager.getInstance().inscription(utilisateur);
 			// Flash
-
+				
+			utilisateur = UtilisateurManager.getInstance().login(pseudo, motDePasse);
+				
+			
 				HttpSession session = request.getSession();
 				utilisateur.setMotDePasse("");
 				session.setAttribute("utilisateur", utilisateur);

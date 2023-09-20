@@ -29,11 +29,12 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		Utilisateur utilisateur = UtilisateurManager.getInstance().login(pseudoOrEmail, password);
-			
+	
 		if (utilisateur == null) {
 			request.setAttribute("error", "Le login ou le mot de passe est éronné");
 			doGet(request, response);
-		}else {
+		}
+		else {
 			HttpSession session = request.getSession();
 			utilisateur.setMotDePasse("");
 			session.setAttribute("utilisateur", utilisateur);
