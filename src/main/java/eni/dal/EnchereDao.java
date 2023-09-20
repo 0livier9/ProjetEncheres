@@ -7,7 +7,7 @@ import eni.bo.Enchere;
 
 public interface EnchereDao {
 	// CRUD
-	void save(ArticleVendu article);
+	void save(Enchere enchere);
 	Enchere findOne(int id);
 	List<Enchere> findAll();
 	void modify(Enchere enchere);

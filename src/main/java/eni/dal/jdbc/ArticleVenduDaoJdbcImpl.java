@@ -1,3 +1,4 @@
+
 package eni.dal.jdbc;
 
 import eni.dal.jdbc.*;
@@ -17,22 +18,33 @@ import eni.bo.Enchere;
 import eni.bo.Utilisateur;
 import eni.dal.EnchereDao;
 
-public class EnchereDaoJdbcImpl implements EnchereDao {
+public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 
 	// Requetes SQL
-	private static final String SELECT_ALL = "SELECT * FROM ENCHERES INNER JOIN ARTICLES_VENDUS ON ENCHERES.no_article = ARTICLES_VENDUS.no_article \r\n"
-			+ "INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN  UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur=UTILISATEURS.no_utilisateur;";
-	private static final String SELECT_ONE = "SELECT * FROM ENCHERES WHERE no_utilisateur = ? AND no_article=?";
-	private static final String SAVE = "";
+	private static final String SELECT_ALL = "";
+	private static final String SELECT_ONE = "SELECT * FROM ARTICLE_VENDUS WHERE no_article = ?";
+	private static final String SAVE = "INSERT INTO ARTICLES_VENDUS " +
+            "(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, etat_vente) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String DELETE_ONE = "DELETE ENCHERES WHERE id = ?";
 	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET no_utilisateur=?,no_article=?,date_enchere=?,montant_enchere=? WHERE id = ?";
 	private static final String FIND_BY_NAME = "SELECT * FROM ENCHERES WHERE no_article LIKE ? ";
 
 	@Override
-	public void save(Enchere enchere) {
+	public void save(ArticleVendu article) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SAVE);) {
+			// valoriser les params de la requete
+			pstmt.setString(1, article.getNomArticle());
+			pstmt.setString(2, article.getDescription());
+			pstmt.setInt(3, article.getPrixInitial());
+			pstmt.setDate(6,Date.valueOf(article.getDateDebutEncheres()));
+			pstmt.setDate(7, Date.valueOf(article.getDateFinEncheres()));
+			pstmt.setInt(8, article.getNoUtilisateur());
+			pstmt.setInt(9, article.getNoCategorie());
+			pstmt.setString(10, article.getEtatVente());
 
+		
 			// executer la requete
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -41,14 +53,14 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	}
 
 	@Override
-	public Enchere findOne(int id) {
+	public ArticleVendu findOne(int id) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SELECT_ONE);) {
-			pstmt.setInt(1, id);			
-			ResultSet rs =  pstmt.executeQuery();
-			if(rs.next()) {
-					return new Enchere(null, null);				
-			}			
+//			pstmt.setInt(1, id);			
+//			ResultSet rs =  pstmt.executeQuery();
+//			if(rs.next()) {
+//					return new ArticleVendu(rs.getString("noArticle"), FIND_BY_NAME, DELETE_ONE, null, null, id, id, null)				
+//			}			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -56,43 +68,22 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	}
 
 	@Override
-	public List<Enchere> findAll() {
+	public List<ArticleVendu> findAll() {
 		try (Connection connection = ConnectionProvider.getConnection();
 				Statement stmt = connection.createStatement();) {
-			List<Enchere> encheres = new ArrayList<Enchere>();
+			List<ArticleVendu> articles = new ArrayList<ArticleVendu>();
 			ResultSet rs = stmt.executeQuery(SELECT_ALL);
 			while (rs.next()) {
-				Utilisateur user = new Utilisateur(rs.getString("pseudo"),
-						rs.getString("nom"),
-						rs.getString("prenom"),
-						rs.getString("email"),
-						rs.getString("telephone"),
-						rs.getString("rue"),
-						rs.getString("code_postal"),
-						rs.getString("ville"),
-						rs.getString("mot_de_passe"));
-				
-				Categorie categorie = new Categorie(rs.getInt("no_categorie"),
-						rs.getString("libelle"));
-				
-				ArticleVendu article = new ArticleVendu(rs.getInt("no_article"),
-						rs.getString("nom_article"), rs.getString("description"),
-						rs.getDate("date_debut_encheres").toLocalDate(),
-						rs.getDate("date_fin_encheres").toLocalDate(),
-						rs.getInt("prix_initial"), 0,
-						rs.getInt("no_utilisateur"),
-						rs.getInt("no_categorie"),
+
+				ArticleVendu article = new ArticleVendu(rs.getString("nom_article"), rs.getString("description"),
+						rs.getDate("date_debut_encheres").toLocalDate(), rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
+						rs.getInt("prix_vente"), rs.getInt("no_utilisateur"), rs.getInt("no_categorie"),
 						rs.getString("etat_vente"));
-			
-			
-				encheres.add(
+				
+				articles.add(article);
 
-						new Enchere(user, article, rs.getDate("date_enchere").toLocalDate(),
-								rs.getInt("montant_enchere")
-
-						));
 			}
-			return encheres;
+			return articles;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -100,7 +91,7 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	}
 
 	@Override
-	public void modify(Enchere enchere) {
+	public void modify(ArticleVendu enchere) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(UPDATE)) {
 
@@ -136,7 +127,7 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	}
 
 	@Override
-	public List<Enchere> findByName(String query) {
+	public List<ArticleVendu> findByName(String query) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_NAME)) {
 ////			pstmt.setString(1, "%" + query + "%");
