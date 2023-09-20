@@ -20,18 +20,17 @@
 							id="description">
 					</div>
 					<div class="mb-3">
-						<label for="categorie" class="form-label">Catégorie:</label> <select
-							class="form-control" name="categorie" id="categorie">
-							<option>1</option>
-							<option>2</option>
-							<option>3</option>
-							<option>4</option>
+						<label for="categories" class="form-label">Catégorie:</label> <select
+							class="form-control" name="categories" id="categories">
+							<c:forEach var="categorie" items="${categories}">
+								<option value="${categorie.noCategorie}">${categorie.libelle}</option>
+							</c:forEach>
 						</select>
 					</div>
 					<div class="mb-3">
-						<label for="myImage" class="form-label">Photo de l'article:</label>
-						<input type="file" name="myImage"
-							accept="image/png, image/gif, image/jpeg" /> 
+						<label for="image" class="form-label">Photo de l'article:</label>
+						<input type="file" name="image"
+							accept="image/png, image/gif, image/jpeg" />
 					</div>
 					<div class="mb-3">
 						<label for="prix_initial" class="form-label">Mise à prix:</label>
@@ -39,16 +38,26 @@
 							id="prix_initial">
 					</div>
 					<div class="mb-3">
-						<label for="date_debut_encheres" class="form-label">Début de l'enchères</label> <input
-							type="date" class="form-control" name="date_debut_encheres" id="date_debut_encheres">
+						<label for="date_debut_encheres" class="form-label">Début
+							de l'enchères</label> <input type="date" class="form-control"
+							name="date_debut_encheres" id="date_debut_encheres">
 					</div>
 					<div class="mb-3">
-						<label for="date_fin_encheres" class="form-label">Fin de l'enchères</label> <input
-							type="date" class="form-control" name="date_fin_encheres" id="date_fin_encheres">
+						<label for="date_fin_encheres" class="form-label">Fin de
+							l'enchères</label> <input type="date" class="form-control"
+							name="date_fin_encheres" id="date_fin_encheres">
 					</div>
 					<div class="mb-3">
-						<label for="Retrait" class="form-label">Retrait</label> <input
-							type="text" class="form-control" name="Retrait" id="Retrait">
+						<fieldset>
+							<legend>Retrait</legend>
+							<label for="rue" class="form-label">rue</label> <input
+								type="text" value="${Rue}" class="form-control" name="rue" id="rue"> <label
+								for="code_postal" class="form-label">Code Postal</label> <input
+								type="text" value="${codePostal}"
+								  class="form-control" name="code_postal"
+								id="code_postal"> <label for="ville" class="form-label">Ville</label>
+							<input type="text" value="${ville}" class="form-control" name="ville" id="ville">
+						</fieldset>
 					</div>
 					<div class="mb-3 text-center mt-5">
 						<button class="btn btn-primary" type="submit">

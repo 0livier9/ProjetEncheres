@@ -1,88 +1,52 @@
 package eni.bo;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Date;
 
 public class ArticleVendu {
-
 	private int noArticle;
 	private String nomArticle;
 	private String description;
 	private LocalDate dateDebutEncheres;
 	private LocalDate dateFinEncheres;
-	private int miseAPrix;
+	private int prixInitial;
 	private int prixVente;
-	private Categorie categorie;
-	private Retrait lieuRetrait;
-	int noCategorie;
-	Utilisateur vendeur;
-	int noUser;
-	
-	public ArticleVendu(String nomArticle,String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
-			 int miseAPrix, Utilisateur vendeur, Categorie categorie) {
+	private String etatVente;
+	private int noUtilisateur;
+	private int noCategorie;
+
+	public ArticleVendu() {
+	}
+
+	public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres,
+			LocalDate dateFinEncheres, int prixInitial, int prixVente,  int noUtilisateur,
+			int noCategorie,String etatVente) {
 		this.noArticle = noArticle;
 		this.nomArticle = nomArticle;
 		this.description = description;
 		this.dateDebutEncheres = dateDebutEncheres;
 		this.dateFinEncheres = dateFinEncheres;
-		this.miseAPrix = miseAPrix;
-		this.categorie=categorie;
-		this.vendeur = vendeur;
-
-
-	}
-	private List<Enchere> encheres;
-
-	public Utilisateur getUser() {
-		return vendeur;
-	}
-
-	public void setUser(Utilisateur user) {
-		this.vendeur = user;
-	}
-
-	public int getNoUser() {
-		return noUser;
-	}
-
-	public void setNoUser(int noUser) {
-		this.noUser = noUser;
-	}
-
-	public int getNoCategorie() {
-		return noCategorie;
-	}
-
-	public Categorie getCategorie() {
-		return categorie;
-	}
-
-	public void setCategorie(Categorie categorie) {
-		this.categorie = categorie;
-	}
-
-	public Retrait getLieuRetrait() {
-		return lieuRetrait;
-	}
-
-	public void setLieuRetrait(Retrait lieuRetrait) {
-		this.lieuRetrait = lieuRetrait;
-	}
-
-	public List<Enchere> getEncheres() {
-		return encheres;
-	}
-
-	public void setEncheres(List<Enchere> encheres) {
-		this.encheres = encheres;
-	}
-
-	public void setNoCategorie(int noCategorie) {
+		this.prixInitial = prixInitial;
+		this.prixVente = prixVente;
+		this.etatVente = etatVente;
+		this.noUtilisateur = noUtilisateur;
 		this.noCategorie = noCategorie;
 	}
 
 
-	
+	public ArticleVendu(String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
+			int prixInitial, int prixVente, int noUtilisateur, int noCategorie, String etatVente) {
+		this.nomArticle = nomArticle;
+		this.description = description;
+		this.dateDebutEncheres = dateDebutEncheres;
+		this.dateFinEncheres = dateFinEncheres;
+		this.prixInitial = prixInitial;
+		this.prixVente = prixVente;
+		this.etatVente = etatVente;
+		this.noUtilisateur = noUtilisateur;
+		this.noCategorie = noCategorie;
+	}
+
 	public int getNoArticle() {
 		return noArticle;
 	}
@@ -123,12 +87,12 @@ public class ArticleVendu {
 		this.dateFinEncheres = dateFinEncheres;
 	}
 
-	public int getMiseAPrix() {
-		return miseAPrix;
+	public int getPrixInitial() {
+		return prixInitial;
 	}
 
-	public void setMiseAPrix(int miseAPrix) {
-		this.miseAPrix = miseAPrix;
+	public void setPrixInitial(int prixInitial) {
+		this.prixInitial = prixInitial;
 	}
 
 	public int getPrixVente() {
@@ -139,14 +103,35 @@ public class ArticleVendu {
 		this.prixVente = prixVente;
 	}
 
-//	public Categorie getCategorieArticle() {
-//		return categorie;
-//	}
-//
-//
-//	public void setCategorieArticle(Categorie categorie) {
-//		this.categorie = categorie;
-//	}
-//	
+	public String getEtatVente() {
+		return etatVente;
+	}
 
+	public void setEtatVente(String etatVente) {
+		this.etatVente = etatVente;
+	}
+
+	public int getNoUtilisateur() {
+		return noUtilisateur;
+	}
+
+	public void setNoUtilisateur(int noUtilisateur) {
+		this.noUtilisateur = noUtilisateur;
+	}
+
+	public int getNoCategorie() {
+		return noCategorie;
+	}
+
+	public void setNoCategorie(int noCategorie) {
+		this.noCategorie = noCategorie;
+	}
+
+	@Override
+	public String toString() {
+		return "ArticleVendu{" + "noArticle=" + noArticle + ", nomArticle='" + nomArticle + '\'' + ", description='"
+				+ description + '\'' + ", dateDebutEncheres=" + dateDebutEncheres + ", dateFinEncheres="
+				+ dateFinEncheres + ", prixInitial=" + prixInitial + ", prixVente=" + prixVente + ", etatVente='"
+				+ etatVente + '\'' + ", noUtilisateur=" + noUtilisateur + ", noCategorie=" + noCategorie + '}';
+	}
 }

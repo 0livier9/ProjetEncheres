@@ -27,10 +27,10 @@ public class EnchereManager {
 		return EnchereDao.findAll();
 	}
 	
-	public void ajouterUneVente(ArticleVendu article) {
+	public void ajouterUneEncheree(Enchere enchere) {
 		
 		// datas validation !!
-		EnchereDao.save(article);				  	
+		EnchereDao.save(enchere);				  	
 	}
 	public void modifierUneEnchere(Enchere enchere) {
 		// datas validation !!
