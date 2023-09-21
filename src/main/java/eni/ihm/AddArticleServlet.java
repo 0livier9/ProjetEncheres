@@ -39,7 +39,6 @@ public class AddArticleServlet extends HttpServlet {
 
 		List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
 
-		// request.getParameter(ville)
 
 		// On met les catégories dans la requête
 		request.setAttribute("categories", categories);
@@ -60,13 +59,12 @@ public class AddArticleServlet extends HttpServlet {
 			// get data from param
 			HttpSession session = request.getSession();
 			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
-			int noUtilisateur = utilisateur.getNoUtilisateur();
+			
+			Categorie categorie = (Categorie) session.getAttribute("categories");
 
-			//Categorie categorie = new Categorie(Integer.parseInt(request.getParameter("categorie")) ,request.getParameter("libelle"));
 			String libelleCategorie = request.getParameter("libelle");
-			int noCategorie = Integer.parseInt(request.getParameter("categories")); 
 
-			System.out.println(noUtilisateur);
+			
 			String nom = request.getParameter("nom_article");
 			String description = request.getParameter("description");
 			LocalDate dateDebutEnchere = LocalDate.parse(request.getParameter("date_fin_encheres"));
@@ -75,7 +73,7 @@ public class AddArticleServlet extends HttpServlet {
 			String etatVente = request.getParameter("etat_vente");
 			// create Article instance
 			ArticleVendu article = new ArticleVendu(nom, description, dateDebutEnchere, dateFinEnchere, prixInitial, 0,
-					noUtilisateur, noCategorie, etatVente);
+					utilisateur, categorie, etatVente);
 			// Add
 			ArticleVenduManager.getInstance().ajouterUneVente(article);
 			// redirect

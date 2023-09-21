@@ -1,4 +1,4 @@
-package eni.ihm;
+	package eni.ihm;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -21,8 +21,9 @@ public class ListEncheresServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		List<ArticleVendu> articles = null;
-	
+		
 		if(request.getParameter("q")!=null) {
 			articles = ArticleVenduManager.getInstance().rechercheUnArticle(request.getParameter("q"));
 		}else {
