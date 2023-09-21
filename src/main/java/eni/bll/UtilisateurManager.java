@@ -29,10 +29,7 @@ private static UtilisateurManager instance;
 	public void inscription(Utilisateur utilisateur) throws JDBCException, BLLException, SQLServerException {
 		// validation !!!!!!!!
 		checkFields(utilisateur);
-		utilisateur.setMotDePasse( PasswordEncoder.hashPassword(
-				utilisateur.getMotDePasse()// password no hashé
-					)
-				);
+		utilisateur.setMotDePasse( PasswordEncoder.hashPassword(utilisateur.getMotDePasse()));
 		
 		utilisateur.setCredit(0);
 		utilisateur.setAdministrateur(false);
@@ -79,6 +76,12 @@ private static UtilisateurManager instance;
 		return null;
 	}
 	
+	public Utilisateur recupererUtilisateurById(int noUtilisateur) {
+		Utilisateur utilisateur = utilisateurDao.findById(noUtilisateur);
+		return utilisateur;
+	}
+	
+	
 	public void supprimerUnUtilisateur(String pseudo, String motDePasse) {
 		Utilisateur utilisateur = utilisateurDao.findByPseudo(pseudo);
 		
@@ -87,5 +90,18 @@ private static UtilisateurManager instance;
 		if (PasswordEncoder.verifyPassword(motDePasse, utilisateur.getMotDePasse())) {
 			utilisateurDao.remove(pseudo);
 		}
+	}
+	
+	public void modificationUtilisateur(Utilisateur utilisateur) throws BLLException {
+		
+		Utilisateur ancienUtilisateur = utilisateurDao.findByMotDePasse(utilisateur.getMotDePasse());
+		
+		String password = utilisateur.getMotDePasse();
+				
+		checkFields(utilisateur);
+		
+		if(ancienUtilisateur!=null && PasswordEncoder.verifyPassword(password, ancienUtilisateur.getMotDePasse()) ) {
+			utilisateurDao.modify(utilisateur);	
+		}					  	
 	}
 }

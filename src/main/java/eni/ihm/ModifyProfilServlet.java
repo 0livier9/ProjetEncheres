@@ -9,7 +9,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
+
 import eni.bll.UtilisateurManager;
+import eni.bll.exception.BLLException;
+import eni.bo.Utilisateur;
+import eni.dal.jdbc.exception.JDBCException;
 
 @WebServlet("/modification")
 public class ModifyProfilServlet extends HttpServlet {
@@ -24,27 +29,45 @@ public class ModifyProfilServlet extends HttpServlet {
 			
 			String action = request.getParameter("modifier");
 			
-			if (action=="modifier") {
+			if (action.equals("modifier")) {
 				
+				HttpSession session = request.getSession();
+				Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+				int noUtilisateur = utilisateur.getNoUtilisateur();
+				int credit = utilisateur.getCredit();
+				boolean administrateur = utilisateur.isAdministrateur();
+			
+				utilisateur = new Utilisateur(noUtilisateur, request.getParameter("pseudo"), request.getParameter("nom"),
+						request.getParameter("prenom"), request.getParameter("email"), request.getParameter("telephone"),
+						request.getParameter("rue"), request.getParameter("codePostal"), request.getParameter("ville"),
+						request.getParameter("motDePasse"), credit, administrateur);
+				
+				UtilisateurManager.getInstance().modificationUtilisateur(utilisateur);
+				
+				session.setAttribute("utilisateur", utilisateur);
+				
+				response.sendRedirect( request.getContextPath() +"/modification");
 				
 			}else {
-				// récupérer le param dans url
+				
 				String pseudo = request.getParameter("pseudo");	
 				String motDePasse = request.getParameter("motDePasse");
 				
 				// supprimer un utilisateur
 				
 				UtilisateurManager.getInstance().supprimerUnUtilisateur(pseudo, motDePasse);
-				// redirect
 				
 				HttpSession session = request.getSession();
 				session.invalidate();
-				response.sendRedirect( request.getContextPath() +"/eni-enchere");
+				response.sendRedirect( request.getContextPath() +"/Accueil");
 			}
 			
 			
-		}catch (Exception e) {
-			response.sendError(404);
+		}catch (BLLException e) {
+
+			request.setAttribute("error", e.getMessage());
+			doGet(request, response);
+			e.printStackTrace();
 		}
 	}
 

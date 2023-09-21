@@ -12,5 +12,8 @@ public interface UtilisateurDao {
 	void save(Utilisateur utilisateur) throws JDBCException, SQLServerException;
 	Utilisateur findByEmail(String email);
 	Utilisateur findByPseudo(String pseudoOrEmail);
+	Utilisateur findByMotDePasse(String motDePasse);
+	Utilisateur findById(int noUtilisateur);
 	void remove(String pseudo);
+	void modify(Utilisateur utilisateur);
 }
