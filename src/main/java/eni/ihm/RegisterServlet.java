@@ -30,23 +30,30 @@ public class RegisterServlet extends HttpServlet {
 			
 			String pseudo = request.getParameter("pseudo");
 			String motDePasse = request.getParameter("motDePasse");
+			String confirmationMotDePasse = request.getParameter("confirmationMotDePasse");
 			
-			Utilisateur utilisateur = new Utilisateur(pseudo, request.getParameter("nom"),
-					request.getParameter("prenom"), request.getParameter("email"), request.getParameter("telephone"),
-					request.getParameter("rue"), request.getParameter("codePostal"), request.getParameter("ville"),
-					motDePasse);
+			
+			if (motDePasse!=confirmationMotDePasse) {
+				throw new BLLException("Les mots de passe ne sont pas identiques !!");
+			}else {
+				Utilisateur utilisateur = new Utilisateur(pseudo, request.getParameter("nom"),
+						request.getParameter("prenom"), request.getParameter("email"), request.getParameter("telephone"),
+						request.getParameter("rue"), request.getParameter("codePostal"), request.getParameter("ville"),
+						motDePasse);
 
-			// user.setConfirmPassword()
-			UtilisateurManager.getInstance().inscription(utilisateur);
-			// Flash
+				// user.setConfirmPassword()
+				UtilisateurManager.getInstance().inscription(utilisateur);
+				// Flash
+					
+				utilisateur = UtilisateurManager.getInstance().login(pseudo, motDePasse);
+					
 				
-			utilisateur = UtilisateurManager.getInstance().login(pseudo, motDePasse);
-				
+					HttpSession session = request.getSession();
+					utilisateur.setMotDePasse("");
+					session.setAttribute("utilisateur", utilisateur);
+					response.sendRedirect(request.getContextPath() + "/Accueil");
+			}
 			
-				HttpSession session = request.getSession();
-				utilisateur.setMotDePasse("");
-				session.setAttribute("utilisateur", utilisateur);
-				response.sendRedirect(request.getContextPath() + "/eni-enchere");
 			
 
 		} catch (SQLServerException | JDBCException | BLLException e) {

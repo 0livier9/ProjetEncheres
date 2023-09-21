@@ -42,7 +42,15 @@ public class ModifyProfilServlet extends HttpServlet {
 						request.getParameter("rue"), request.getParameter("codePostal"), request.getParameter("ville"),
 						request.getParameter("motDePasse"), credit, administrateur);
 				
-				UtilisateurManager.getInstance().modificationUtilisateur(utilisateur);
+				String nouveauMotDePasse="";
+			
+				if (request.getParameter("nouveauMotDePasse").isEmpty()) {
+					nouveauMotDePasse = request.getParameter("motDePasse");
+				}else {
+					nouveauMotDePasse = request.getParameter("nouveauMotDePasse");
+				}
+				
+				UtilisateurManager.getInstance().modificationUtilisateur(utilisateur, nouveauMotDePasse);
 				
 				session.setAttribute("utilisateur", utilisateur);
 				

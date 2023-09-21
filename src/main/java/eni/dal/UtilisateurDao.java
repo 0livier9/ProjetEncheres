@@ -15,5 +15,5 @@ public interface UtilisateurDao {
 	Utilisateur findByMotDePasse(String motDePasse);
 	Utilisateur findById(int noUtilisateur);
 	void remove(String pseudo);
-	void modify(Utilisateur utilisateur);
+	void modify(Utilisateur utilisateur, String nouveauMotDePasse);
 }

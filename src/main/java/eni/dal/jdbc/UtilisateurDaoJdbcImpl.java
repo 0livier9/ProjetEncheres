@@ -150,7 +150,7 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 	public Utilisateur findByMotDePasse(String motDePasse) {
 		try(
 				Connection connection = ConnectionProvider.getConnection();
-				PreparedStatement pstmt = connection.prepareStatement(SELECT_BY_EMAIL);
+				PreparedStatement pstmt = connection.prepareStatement(SELECT_BY_MOTDEPASSE);
 					){
 
 				pstmt.setString(1, motDePasse);				
@@ -193,7 +193,7 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 	}
 	
 	@Override
-	public void modify(Utilisateur utilisateur) {
+	public void modify(Utilisateur utilisateur, String nouveauMotDePasse) {
 		try(
 				Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(UPDATE)
@@ -207,7 +207,7 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 			pstmt.setString(6, utilisateur.getRue());
 			pstmt.setString(7, utilisateur.getCodePostal());
 			pstmt.setString(8, utilisateur.getVille());
-			pstmt.setString(9, utilisateur.getMotDePasse());
+			pstmt.setString(9, nouveauMotDePasse);
 			pstmt.setInt(10, utilisateur.getCredit());
 			pstmt.setBoolean(11, utilisateur.isAdministrateur());
 			

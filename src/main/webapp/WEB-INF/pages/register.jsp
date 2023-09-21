@@ -48,7 +48,11 @@
 					</div>
 					<div class="mb-3">
 					  <label for="motDePasse" class="form-label">Mot de passe</label>
-					  <input type="password" class="form-control" value="${ param.motDePasse }" name="motDePasse" id="motDePasse">
+					  <input type="password" class="form-control" name="motDePasse" id="motDePasse">
+					</div>
+					<div class="mb-3">
+					  <label for="ConfirmationMotDePasse" class="form-label">Confirmation mot de passe</label>
+					  <input type="password" class="form-control" name="confirmationMotDePasse" id="ConfirmationMotDePasse">
 					</div>
 					<button class="btn btn-primary" role="button" type="submit" >S'inscrire</button>					
 				</form>

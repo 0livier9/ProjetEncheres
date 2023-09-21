@@ -20,7 +20,7 @@
 						<p>Test Nom: ${article.getNomArticle()}</p>
 						<p>Test Prix: ${article.getPrixInitial()}</p>
 						<p>Test Date: ${article.getDateFinEncheres()}</p>
-						<p>Test Vendeur: ${article.getVendeur()}</p>
+						<p>Test Vendeur: ${article.getVendeur().getPseudo()}</p>
 
 
 						<a class="btn btn-dark" href="/encheres/détails"> <i

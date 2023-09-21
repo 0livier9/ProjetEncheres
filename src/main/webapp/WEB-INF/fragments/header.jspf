@@ -34,7 +34,7 @@
 					<div class="collapse navbar-collapse" id="navbarNav">
 						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 							<li class="nav-item"><a class="nav-link"
-								href="${ pageContext.request.contextPath }/eni-enchere">Liste des enchères</a></li>
+								href="${ pageContext.request.contextPath }/Accueil">Liste des enchères</a></li>
 							<c:if test="${ utilisateur != null }">
 								<li class="nav-item"><a class="nav-link"
 									href="${ pageContext.request.contextPath }/encheres/ajouter">Ajouter

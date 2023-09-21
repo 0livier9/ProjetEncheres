@@ -12,6 +12,7 @@ import eni.dal.DaoFactory;
 import eni.dal.UtilisateurDao;
 import eni.dal.jdbc.exception.JDBCException;
 import eni.helper.PasswordEncoder;
+import jakarta.servlet.http.HttpSession;
 
 public class UtilisateurManager {
 
@@ -50,8 +51,6 @@ private static UtilisateurManager instance;
 		
 		if ( !StringUtils.isAlphanumeric(utilisateur.getPseudo())) throw new BLLException("Pas de charactères spéciaux merci !");
 		
-		
-		
 		// verifier la syntaxe de l'email
 		if( utilisateur.getMotDePasse().isBlank() ) throw new BLLException("Le champs mot de passe est obligatoire!");
 		if( utilisateur.getMotDePasse().length() < 8 ||  utilisateur.getMotDePasse().length() > 35 )throw new BLLException("La taille du mot de passe doit etre entre 8 et 35");
@@ -81,7 +80,6 @@ private static UtilisateurManager instance;
 		return utilisateur;
 	}
 	
-	
 	public void supprimerUnUtilisateur(String pseudo, String motDePasse) {
 		Utilisateur utilisateur = utilisateurDao.findByPseudo(pseudo);
 		
@@ -92,16 +90,18 @@ private static UtilisateurManager instance;
 		}
 	}
 	
-	public void modificationUtilisateur(Utilisateur utilisateur) throws BLLException {
+	public void modificationUtilisateur(Utilisateur utilisateur, String nouveauMotDePasse) throws BLLException {
 		
-		Utilisateur ancienUtilisateur = utilisateurDao.findByMotDePasse(utilisateur.getMotDePasse());
-		
-		String password = utilisateur.getMotDePasse();
-				
 		checkFields(utilisateur);
 		
+		Utilisateur ancienUtilisateur = utilisateurDao.findById(utilisateur.getNoUtilisateur());
+			
+		String password = utilisateur.getMotDePasse();
+		
+		nouveauMotDePasse = PasswordEncoder.hashPassword(nouveauMotDePasse);
+		
 		if(ancienUtilisateur!=null && PasswordEncoder.verifyPassword(password, ancienUtilisateur.getMotDePasse()) ) {
-			utilisateurDao.modify(utilisateur);	
+			utilisateurDao.modify(utilisateur, nouveauMotDePasse);	
 		}					  	
 	}
 }
