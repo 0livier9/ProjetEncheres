@@ -41,10 +41,6 @@
 					  <label for="ville" class="form-label">Ville</label>
 					  <input type="text" class="form-control" readonly="readonly" value="${ utilisateur.ville }" name="ville" id="ville" placeholder="ex. toto">
 					</div>
-					<%-- <div class="mb-3">
-					  <label for="motDePasse" class="form-label">Mot de passe</label>
-					  <input type="password" class="form-control" value="${ utilisateur.motDePasse }" name="motDePasse" id="motDePasse">
-					</div> --%>
 					<button class="btn btn-primary" role="button" type="submit" >Modifier</button>					
 				</form>
 			</div>

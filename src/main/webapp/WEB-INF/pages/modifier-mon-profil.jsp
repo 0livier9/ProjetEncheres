@@ -8,7 +8,12 @@
 		</div>		
 		<div class="row mt-5">
 			<div class="col-8 offset-2">
-				<form method="POST" action=""  >
+			<c:if test="${ !empty error }">
+					<div class="alert alert-danger">
+						${ error }
+					</div>
+				</c:if>
+				<form method="POST" action="" onsubmit="return confirm('Confirmer mosdification ou suppression ?')" >
 					<div class="mb-3">
 					  <label for="pseudo" class="form-label">Pseudo</label>
 					  <input type="text" class="form-control" value="${ utilisateur.pseudo }" name="pseudo" id="pseudo" placeholder="ex. toto">
@@ -56,7 +61,7 @@
 															
 					<div class="mb-3 text-center mt-5">
 						<button type="submit" name="modifier" value="modifier" class="btn btn-danger" >Enregistrer mon Compte</button>
-						<button type="submit" name="supprimer" value="supprimer" class="btn btn-danger" onsubmit="return confirm('Voulez-vous vraiment supprimer ce jeu ?')">Supprimer mon compte</button>
+						<button type="submit" name="supprimer" value="supprimer" class="btn btn-danger">Supprimer mon compte</button>
 					</div>
 				</form>
 				

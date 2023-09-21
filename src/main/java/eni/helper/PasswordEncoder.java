@@ -11,11 +11,6 @@ public class PasswordEncoder {
 	}
 	
 	public static boolean verifyPassword(String password, String hashedPassword) {
-		return BCrypt.verifyer()
-				.verify(
-						password.toCharArray(),
-						hashedPassword.toCharArray())
-				.verified;
+		return BCrypt.verifyer().verify(password.toCharArray(),hashedPassword.toCharArray()).verified;
 	}
-	
 }
