@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			utilisateur.setMotDePasse("");
 			session.setAttribute("utilisateur", utilisateur);
-			response.sendRedirect(request.getContextPath()+"/eni-enchere");
+			response.sendRedirect(request.getContextPath()+"/Accueil");
 		}
 		
 	}

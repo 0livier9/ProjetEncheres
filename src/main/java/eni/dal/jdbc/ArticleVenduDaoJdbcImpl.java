@@ -21,7 +21,7 @@ import eni.dal.EnchereDao;
 public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 
 	// Requetes SQL
-	private static final String SELECT_ALL = "";
+	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur";
 	private static final String SELECT_ONE = "SELECT * FROM ARTICLE_VENDUS WHERE no_article = ?";
 	private static final String SAVE = "INSERT INTO ARTICLES_VENDUS " +
             "(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, etat_vente) " +
@@ -37,12 +37,13 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 			// valoriser les params de la requete
 			pstmt.setString(1, article.getNomArticle());
 			pstmt.setString(2, article.getDescription());
-			pstmt.setInt(3, article.getPrixInitial());
-			pstmt.setDate(6,Date.valueOf(article.getDateDebutEncheres()));
-			pstmt.setDate(7, Date.valueOf(article.getDateFinEncheres()));
-			pstmt.setInt(8, article.getNoUtilisateur());
-			pstmt.setInt(9, article.getNoCategorie());
-			pstmt.setString(10, article.getEtatVente());
+			pstmt.setDate(3,Date.valueOf(article.getDateDebutEncheres()));
+			pstmt.setDate(4, Date.valueOf(article.getDateFinEncheres()));
+			pstmt.setInt(5, article.getPrixInitial());
+			pstmt.setInt(6, article.getPrixVente());
+			pstmt.setInt(7, article.getNoUtilisateur());
+			pstmt.setInt(8, article.getNoCategorie());
+			pstmt.setString(9, article.getEtatVente());
 
 		
 			// executer la requete

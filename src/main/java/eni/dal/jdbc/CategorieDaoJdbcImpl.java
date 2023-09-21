@@ -43,14 +43,14 @@ public class CategorieDaoJdbcImpl implements CategorieDao {
 	}
 
 	@Override
-	public Categorie findOne(int id) {
+	public Categorie findOne(int no_categorie) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SELECT_ONE);) {
-//			pstmt.setInt(1, id);			
-//			ResultSet rs =  pstmt.executeQuery();
-//			if(rs.next()) {
-//					return new ArticleVendu(rs.getString("noArticle"), FIND_BY_NAME, DELETE_ONE, null, null, id, id, null)				
-//			}			
+			pstmt.setInt(1, no_categorie);			
+			ResultSet rs =  pstmt.executeQuery();
+			if(rs.next()) {
+					return new Categorie(rs.getInt(no_categorie),rs.getString("libelle"));		
+			}			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

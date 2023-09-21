@@ -9,21 +9,24 @@
 		<div class="row mt-5">
 			<div class="col-8 offset-2">
 
-				<c:forEach var="enchere" items="${ encheres }">
-					
-			
-			<div>
-						<p>${ enchere.user.getPseudo() }</p>
-						<p>${ enchere.article.getNomArticle() }</p>
-						<p>${ enchere.dateEnchere }</p>
-						<p>${ enchere.montantEnchere }</p>
-						<p>${ enchere.user.getVille() }</p>
+				<c:forEach var="article" items="${ articles }">
 
-					
-							<a class="btn btn-dark" href="/encheres/détails"> <i
-								class="fa-solid fa-eye"></i>
-							</a>
-					
+
+					<div class=col-4>
+						<p>${ article.getNomArticle() }</p>
+						<p>${ article.getPrixInitial() }</p>
+						<p>${ article.getDateFinEncheres() }</p>
+						<p>${ article.getVendeur().getPseudo() }</p>
+						<p>Test Nom: ${article.getNomArticle()}</p>
+						<p>Test Prix: ${article.getPrixInitial()}</p>
+						<p>Test Date: ${article.getDateFinEncheres()}</p>
+						<p>Test Vendeur: ${article.getVendeur()}</p>
+
+
+						<a class="btn btn-dark" href="/encheres/détails"> <i
+							class="fa-solid fa-eye"></i>
+						</a>
+
 					</div>
 				</c:forEach>
 

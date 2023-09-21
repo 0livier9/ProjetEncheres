@@ -26,42 +26,45 @@ public class AddArticleServlet extends HttpServlet {
 
 	// afficher la page d'ajout
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
-	    HttpSession session = request.getSession();
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
 
-	    Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 
-	    int noUtilisateur = utilisateur.getNoUtilisateur();  //  On récupérer le numéro de l'utilisateur
+		int noUtilisateur = utilisateur.getNoUtilisateur(); // On récupérer le numéro de l'utilisateur
 
-	    String rue = utilisateur.getRue();
-	    String codePostal = utilisateur.getCodePostal();
-	    String ville = utilisateur.getVille();
+		String rue = utilisateur.getRue();
+		String codePostal = utilisateur.getCodePostal();
+		String ville = utilisateur.getVille();
 
-	    List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
+		List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
 
-	    // On met  les catégories dans la requête
-	    request.setAttribute("categories", categories);
+		// request.getParameter(ville)
 
-	    request.setAttribute("rue", rue);
-	    request.setAttribute("code_postal", codePostal);
-	    request.setAttribute("ville", ville);
+		// On met les catégories dans la requête
+		request.setAttribute("categories", categories);
 
-	    // On met le numéro de l'utilisateur dans la requête
-	    request.setAttribute("no_utilisateur", noUtilisateur);
+		request.setAttribute("rue", rue);
+		request.setAttribute("code_postal", codePostal);
+		request.setAttribute("ville", ville);
 
-	    request.getRequestDispatcher("/WEB-INF/pages/article-add.jsp").forward(request, response);
+		// On met le numéro de l'utilisateur dans la requête
+		request.setAttribute("no_utilisateur", noUtilisateur);
+
+		request.getRequestDispatcher("/WEB-INF/pages/article-add.jsp").forward(request, response);
 	}
-
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
 			// get data from param
-		    HttpSession session = request.getSession();
-	        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
-	        int noUtilisateur = utilisateur.getNoUtilisateur();
-	        
-			Categorie categorie = new Categorie();
+			HttpSession session = request.getSession();
+			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+			int noUtilisateur = utilisateur.getNoUtilisateur();
+
+			//Categorie categorie = new Categorie(Integer.parseInt(request.getParameter("categorie")) ,request.getParameter("libelle"));
+			String libelleCategorie = request.getParameter("libelle");
+			int noCategorie = Integer.parseInt(request.getParameter("categories")); 
 
 			System.out.println(noUtilisateur);
 			String nom = request.getParameter("nom_article");
@@ -70,16 +73,14 @@ public class AddArticleServlet extends HttpServlet {
 			LocalDate dateFinEnchere = LocalDate.parse(request.getParameter("date_fin_encheres"));
 			int prixInitial = Integer.parseInt(request.getParameter("prix_initial"));
 			String etatVente = request.getParameter("etat_vente");
-			int noCategorie = categorie.getNoCategorie();
-
 			// create Article instance
 			ArticleVendu article = new ArticleVendu(nom, description, dateDebutEnchere, dateFinEnchere, prixInitial, 0,
 					noUtilisateur, noCategorie, etatVente);
-			// Add 
+			// Add
 			ArticleVenduManager.getInstance().ajouterUneVente(article);
 			// redirect
 
-			response.sendRedirect(request.getContextPath() + "/encheres.jsp");
+			response.sendRedirect(request.getContextPath() + "/Accueil");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
