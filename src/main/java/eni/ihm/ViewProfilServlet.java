@@ -19,12 +19,8 @@ public class ViewProfilServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession();
-		
-		if (session.getAttribute("utilisateur")!=null ){
 			request.getRequestDispatcher("/WEB-INF/pages/mon-profil.jsp").forward(request, response);
-		}else {
-			request.getRequestDispatcher("/WEB-INF/pages/profil-des-autres.jsp").forward(request, response);
-		}
+	
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
 		

@@ -33,7 +33,7 @@
 					<h4 class="card-title">Prix: ${ article.getPrixInitial() } points</h4>
 					<p class="card-text">Fin de l'enchere: ${ article.getDateFinEncheres() }</p>
 					<p class="card-text">
-						vendeur : <a href="#" class="card-link"> ${ article.getVendeur().getPseudo() }</a>
+						vendeur : <a href="${ pageContext.request.contextPath }/profil-vendeur?id=${ article.getVendeur().getNoUtilisateur() }" class="card-link"> ${ article.getVendeur().getPseudo() }</a>
 					</p>
 				</div>
 			</div>

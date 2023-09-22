@@ -60,10 +60,11 @@ public class AddArticleServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 			
-			Categorie categorie = (Categorie) session.getAttribute("categories");
-
+			int noCat =  Integer.parseInt(request.getParameter("categories"));
+			
 			String libelleCategorie = request.getParameter("libelle");
 
+			Categorie categorie = new Categorie(noCat, libelleCategorie);
 			
 			String nom = request.getParameter("nom_article");
 			String description = request.getParameter("description");
@@ -75,6 +76,8 @@ public class AddArticleServlet extends HttpServlet {
 			ArticleVendu article = new ArticleVendu(nom, description, dateDebutEnchere, dateFinEnchere, prixInitial, 0,
 					utilisateur, categorie, etatVente);
 			// Add
+			
+			
 			ArticleVenduManager.getInstance().ajouterUneVente(article);
 			// redirect
 
