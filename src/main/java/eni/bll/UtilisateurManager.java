@@ -51,10 +51,8 @@ private static UtilisateurManager instance;
 		
 		if ( !StringUtils.isAlphanumeric(utilisateur.getPseudo())) throw new BLLException("Pas de charactères spéciaux merci !");
 		
-		// verifier la syntaxe de l'email
 		if( utilisateur.getMotDePasse().isBlank() ) throw new BLLException("Le champs mot de passe est obligatoire!");
 		if( utilisateur.getMotDePasse().length() < 8 ||  utilisateur.getMotDePasse().length() > 35 )throw new BLLException("La taille du mot de passe doit etre entre 8 et 35");
-		//if(!user.getPassword().equals(user.getConfirmpassword))
 	}
 
 	public Utilisateur login(String pseudoOrEmail,String password) {	
@@ -80,14 +78,18 @@ private static UtilisateurManager instance;
 		return utilisateur;
 	}
 	
-	public void supprimerUnUtilisateur(String pseudo, String motDePasse) {
+	public void supprimerUnUtilisateur(String pseudo, String motDePasse) throws BLLException {
+			
+		if( motDePasse.isBlank() ) throw new BLLException("Le champs mot de passe est obligatoire!");
+		
 		Utilisateur utilisateur = utilisateurDao.findByPseudo(pseudo);
 		
 		
-		
-		if (PasswordEncoder.verifyPassword(motDePasse, utilisateur.getMotDePasse())) {
-			utilisateurDao.remove(pseudo);
+		if (!PasswordEncoder.verifyPassword(motDePasse, utilisateur.getMotDePasse())) {
+			throw new BLLException("Le mot de passe n'est pas bon !");
 		}
+			utilisateurDao.remove(pseudo);
+		
 	}
 	
 	public void modificationUtilisateur(Utilisateur utilisateur, String nouveauMotDePasse) throws BLLException {

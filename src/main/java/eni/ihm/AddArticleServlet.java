@@ -78,7 +78,7 @@ public class AddArticleServlet extends HttpServlet {
 			ArticleVenduManager.getInstance().ajouterUneVente(article);
 			// redirect
 
-			response.sendRedirect(request.getContextPath() + "/Accueil");
+			response.sendRedirect(request.getContextPath() + "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

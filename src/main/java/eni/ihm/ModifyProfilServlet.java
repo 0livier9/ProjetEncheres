@@ -27,9 +27,13 @@ public class ModifyProfilServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			
-			String action = request.getParameter("modifier");
+		
+			
+				String action=request.getParameter("modifierOuSupprimer");
+			
 			
 			if (action.equals("modifier")) {
+				
 				
 				HttpSession session = request.getSession();
 				Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
@@ -47,27 +51,33 @@ public class ModifyProfilServlet extends HttpServlet {
 				if (request.getParameter("nouveauMotDePasse").isEmpty()) {
 					nouveauMotDePasse = request.getParameter("motDePasse");
 				}else {
+					
 					nouveauMotDePasse = request.getParameter("nouveauMotDePasse");
 				}
 				
+				String confirmationMotDePasse = request.getParameter("ConfirmationMotDePasse");
+				
+				if (!nouveauMotDePasse.equals(confirmationMotDePasse)) {
+					throw new BLLException("Les mots de passe ne sont pas identiques !!");
+				}else {
+				
+					
 				UtilisateurManager.getInstance().modificationUtilisateur(utilisateur, nouveauMotDePasse);
 				
 				session.setAttribute("utilisateur", utilisateur);
 				
 				response.sendRedirect( request.getContextPath() +"/modification");
-				
+				}
 			}else {
 				
 				String pseudo = request.getParameter("pseudo");	
 				String motDePasse = request.getParameter("motDePasse");
 				
-				// supprimer un utilisateur
-				
 				UtilisateurManager.getInstance().supprimerUnUtilisateur(pseudo, motDePasse);
 				
 				HttpSession session = request.getSession();
 				session.invalidate();
-				response.sendRedirect( request.getContextPath() +"/Accueil");
+				response.sendRedirect( request.getContextPath() +"");
 			}
 			
 			

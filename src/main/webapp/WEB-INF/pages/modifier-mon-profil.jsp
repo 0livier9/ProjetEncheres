@@ -7,7 +7,7 @@
 			<h1> Inscription </h1>
 		</div>		
 		<div class="row mt-5">
-			<div class="col-8 offset-2">
+			<div class="col-4 offset-4">
 			<c:if test="${ !empty error }">
 					<div class="alert alert-danger">
 						${ error }
@@ -60,8 +60,8 @@
 					</div>
 															
 					<div class="mb-3 text-center mt-5">
-						<button type="submit" name="modifier" value="modifier" class="btn btn-danger" >Enregistrer mon Compte</button>
-						<button type="submit" name="supprimer" value="supprimer" class="btn btn-danger">Supprimer mon compte</button>
+						<button type="submit" name="modifierOuSupprimer" value="modifier" class="btn btn-danger" >Enregistrer mes modifications</button>
+						<button type="submit" name="modifierOuSupprimer" value="supprimer" class="btn btn-danger">Supprimer mon compte</button>
 					</div>
 				</form>
 				

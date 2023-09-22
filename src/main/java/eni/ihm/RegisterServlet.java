@@ -33,7 +33,7 @@ public class RegisterServlet extends HttpServlet {
 			String confirmationMotDePasse = request.getParameter("confirmationMotDePasse");
 			
 			
-			if (motDePasse!=confirmationMotDePasse) {
+			if (!motDePasse.equals(confirmationMotDePasse)) {
 				throw new BLLException("Les mots de passe ne sont pas identiques !!");
 			}else {
 				Utilisateur utilisateur = new Utilisateur(pseudo, request.getParameter("nom"),
@@ -51,7 +51,7 @@ public class RegisterServlet extends HttpServlet {
 					HttpSession session = request.getSession();
 					utilisateur.setMotDePasse("");
 					session.setAttribute("utilisateur", utilisateur);
-					response.sendRedirect(request.getContextPath() + "/Accueil");
+					response.sendRedirect(request.getContextPath() + "");
 			}
 			
 			

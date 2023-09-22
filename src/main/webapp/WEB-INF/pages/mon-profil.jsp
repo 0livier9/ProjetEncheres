@@ -7,7 +7,7 @@
 			<h1> Inscription </h1>
 		</div>		
 		<div class="row mt-5">
-			<div class="col-8 offset-2">
+			<div class="col-4 offset-4">
 				<form method="post" >
 					<div class="mb-3">
 					  <label for="pseudo" class="form-label">Pseudo</label>
