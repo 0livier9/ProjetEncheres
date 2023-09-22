@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 
 import eni.bll.ArticleVenduManager;
@@ -20,6 +22,8 @@ public class DetailsVenteServlet extends HttpServlet {
 			// récupérer le param dans url
 			int id = Integer.parseInt(request.getParameter("id") );
 			// récupérer l'objet article
+			HttpSession session = request.getSession();
+			session.setAttribute("id-article", id);
 			 ArticleVendu article = ArticleVenduManager.getInstance().recupUnArticle(id);
 			// transmettre l'objet vers la jsp
 			

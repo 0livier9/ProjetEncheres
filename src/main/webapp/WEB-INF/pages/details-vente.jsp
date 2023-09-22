@@ -66,15 +66,15 @@
 						</fieldset>
 					</div>
 					<div class="mb-3">
-						<label for="prix_initial" class="form-label">Vendeur:</label>
+						<label for="vendeur" class="form-label">Vendeur:</label>
 						<input type="text" value="${article.getVendeur().getPseudo()}"
 							readonly="readonly" class="form-control" name="prix_initial"
 							id="prix_initial">
 					</div>
-					<form action="" method="POST">
+					<form action="<%=request.getContextPath()+"/encherir"%>" method="POST">
 					<div class="mb-3">
-					<label for="prix_initial" class="form-label">Ma proposition:</label>
-					<input type="number" class="form-control" name="prix_initial"
+					<label for="montantEnchere" class="form-label">Ma proposition:</label>
+					<input type="number" class="form-control" name="montantEnchere"
 							id="prix_initial">	
 					</div>
 					<button class="btn btn-primary" type="submit">
