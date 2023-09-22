@@ -22,13 +22,13 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 
 	// Requetes SQL
 	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur";
-	private static final String SELECT_ONE = "SELECT * FROM ARTICLE_VENDUS WHERE no_article = ?";
+	private static final String SELECT_ONE = "SELECT * FROM ARTICLES_VENDUS WHERE no_article = ?";
 	private static final String SAVE = "INSERT INTO ARTICLES_VENDUS " +
             "(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, etat_vente) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String DELETE_ONE = "DELETE ENCHERES WHERE id = ?";
 	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET no_utilisateur=?,no_article=?,date_enchere=?,montant_enchere=? WHERE id = ?";
-	private static final String FIND_BY_NAME = "SELECT * FROM ENCHERES WHERE no_article LIKE ? ";
+	private static final String FIND_BY_NAME = "SELECT * FROM ARTICLES_VENDUS WHERE nom_article LIKE ? ";
 
 	@Override
 	public void save(ArticleVendu article) {
@@ -57,11 +57,30 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 	public ArticleVendu findOne(int id) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SELECT_ONE);) {
-//			pstmt.setInt(1, id);			
-//			ResultSet rs =  pstmt.executeQuery();
-//			if(rs.next()) {
-//					return new ArticleVendu(rs.getString("noArticle"), FIND_BY_NAME, DELETE_ONE, null, null, id, id, null)				
-//			}			
+			pstmt.setInt(1, id);			
+			ResultSet rs =  pstmt.executeQuery();
+			if(rs.next()) {
+				
+				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
+				
+				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"),
+						rs.getString("pseudo"),
+						rs.getString("nom"),
+						rs.getString("prenom"),
+						rs.getString("email"), 
+						rs.getString("telephone"),
+						rs.getString("rue"),
+						rs.getString("code_postal"),
+						rs.getString("ville"),rs.getString("mot_de_passe"), 0, false);
+				
+					return  new ArticleVendu(rs.getInt("no_article"),rs.getString("nom_article"),
+							rs.getString("description"),
+							rs.getDate("date_debut_encheres").toLocalDate(), 
+							rs.getDate("date_fin_encheres").toLocalDate(), 
+							rs.getInt("prix_initial"),
+							rs.getInt("prix_vente"), vendeur, categorie,
+							rs.getString("etat_vente"));			
+			}			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -146,24 +165,39 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 	public List<ArticleVendu> findByName(String query) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_NAME)) {
-////			pstmt.setString(1, "%" + query + "%");
-////			List<ArticleVendu> games = new ArrayList<GaArticleVendume>();
-////			ResultSet rs = pstmt.executeQuery();
-////			while (rs.next()) {
-////				games.add(
-////
-////						new ArticleVendu(rs.getInt("id"), rs.getString("name"), rs.getString("company"),
-////								rs.getString("category"), rs.getFloat("price"), rs.getDate("releaseDate").toLocalDate(),
-////								rs.getInt("age"), rs.getString("format"), rs.getString("version"))
-//
-//				);
-//			}
-//			return games;
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+			pstmt.setString(1, "%" + query + "%");
+			List<ArticleVendu> articles = new ArrayList<ArticleVendu>();
+			
+			ResultSet rs = pstmt.executeQuery();
+		
+			while (rs.next()) {
+				Categorie categorie = new Categorie();
+				
+				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"),
+						rs.getString("pseudo"),
+						rs.getString("nom"),
+						rs.getString("prenom"),
+						rs.getString("email"), 
+						rs.getString("telephone"),
+						rs.getString("rue"),
+						rs.getString("code_postal"),
+						rs.getString("ville"),rs.getString("mot_de_passe"), 0, false);
+				articles.add(
+						
 
-		} catch (SQLException e) {
+						new ArticleVendu(rs.getString("nom_article"),
+								rs.getString("description"),
+								rs.getDate("date_debut_encheres").toLocalDate(), 
+								rs.getDate("date_fin_encheres").toLocalDate(), 
+								rs.getInt("prix_initial"),
+								rs.getInt("prix_vente"), vendeur, categorie,
+								rs.getString("etat_vente")));	
+				
+			}
+			return articles;
+		} 
+
+		 catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
