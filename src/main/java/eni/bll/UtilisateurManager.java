@@ -100,10 +100,17 @@ private static UtilisateurManager instance;
 			
 		String password = utilisateur.getMotDePasse();
 		
-		nouveauMotDePasse = PasswordEncoder.hashPassword(nouveauMotDePasse);
+//		nouveauMotDePasse = PasswordEncoder.hashPassword(nouveauMotDePasse);
 		
-		if(ancienUtilisateur!=null && PasswordEncoder.verifyPassword(password, ancienUtilisateur.getMotDePasse()) ) {
-			utilisateurDao.modify(utilisateur, nouveauMotDePasse);	
-		}					  	
+		if (!PasswordEncoder.verifyPassword(password, ancienUtilisateur.getMotDePasse())) {
+			throw new BLLException("Le mot de passe n'est pas bon !");
+		}
+		
+		utilisateurDao.modify(utilisateur, PasswordEncoder.hashPassword(nouveauMotDePasse));	
+		
+		
+//		if(ancienUtilisateur!=null && PasswordEncoder.verifyPassword(password, ancienUtilisateur.getMotDePasse()) ) {
+//			utilisateurDao.modify(utilisateur, nouveauMotDePasse);	
+//		}					  	
 	}
 }

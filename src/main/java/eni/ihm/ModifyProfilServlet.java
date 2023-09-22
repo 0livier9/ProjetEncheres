@@ -50,24 +50,19 @@ public class ModifyProfilServlet extends HttpServlet {
 			
 				if (request.getParameter("nouveauMotDePasse").isEmpty()) {
 					nouveauMotDePasse = request.getParameter("motDePasse");
-				}else {
-					
+				}else {	
 					nouveauMotDePasse = request.getParameter("nouveauMotDePasse");
+					if (!nouveauMotDePasse.equals(request.getParameter("ConfirmationMotDePasse"))) {
+						throw new BLLException("Les mots de passe ne sont pas identiques !!");
+					}
 				}
 				
-				String confirmationMotDePasse = request.getParameter("ConfirmationMotDePasse");
-				
-				if (!nouveauMotDePasse.equals(confirmationMotDePasse)) {
-					throw new BLLException("Les mots de passe ne sont pas identiques !!");
-				}else {
-				
-					
 				UtilisateurManager.getInstance().modificationUtilisateur(utilisateur, nouveauMotDePasse);
 				
 				session.setAttribute("utilisateur", utilisateur);
 				
 				response.sendRedirect( request.getContextPath() +"/modification");
-				}
+				
 			}else {
 				
 				String pseudo = request.getParameter("pseudo");	

@@ -73,6 +73,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 						rs.getString("code_postal"),
 						rs.getString("ville"),rs.getString("mot_de_passe"), 0, false);
 				
+				
 					return  new ArticleVendu(rs.getInt("no_article"),rs.getString("nom_article"),
 							rs.getString("description"),
 							rs.getDate("date_debut_encheres").toLocalDate(), 

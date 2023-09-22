@@ -28,7 +28,7 @@
 	<div class="col-8 offset-2 flex-wrap d-flex justify-content-around ">
 		<c:forEach var="article" items="${ articles }">
 			<div class="card col-3 border-primary mb-3 ">
-				<div class="card-header"> <a href="${ pageContext.request.contextPath }/vente/details?id=${ article.getNoArticle()}" > ${ article.getNomArticle() }</a></div>
+				<div class="card-header"> <a href="${ pageContext.request.contextPath }/vente/details?id=${ article.getNoArticle() }" > ${ article.getNomArticle() }</a></div>
 				<div class="card-body">
 					<h4 class="card-title">Prix: ${ article.getPrixInitial() } points</h4>
 					<p class="card-text">Fin de l'enchere: ${ article.getDateFinEncheres() }</p>
