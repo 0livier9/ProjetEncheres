@@ -17,12 +17,10 @@ public class DetailsVenteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			System.out.println("coucou");
 			// récupérer le param dans url
-			int id = Integer.parseInt(request.getParameter("id"));
-			System.out.println("coucou" + id);
+			int id = Integer.parseInt(request.getParameter("id") );
 			// récupérer l'objet article
-			ArticleVendu article = ArticleVenduManager.getInstance().recupUnArticle(id);
+			 ArticleVendu article = ArticleVenduManager.getInstance().recupUnArticle(id);
 			// transmettre l'objet vers la jsp
 			
 			request.setAttribute("article", article);

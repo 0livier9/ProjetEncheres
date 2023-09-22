@@ -80,8 +80,8 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 						rs.getDate("date_debut_encheres").toLocalDate(),
 						rs.getDate("date_fin_encheres").toLocalDate(),
 						rs.getInt("prix_initial"), 0,
-						rs.getInt("no_utilisateur"),
-						rs.getInt("no_categorie"),
+						user,
+						categorie,
 						rs.getString("etat_vente"));
 			
 			

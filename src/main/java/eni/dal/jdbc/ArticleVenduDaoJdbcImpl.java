@@ -22,7 +22,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 
 	// Requetes SQL
 	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur";
-	private static final String SELECT_ONE = "SELECT * FROM ARTICLES_VENDUS WHERE no_article = ?";
+	private static final String SELECT_ONE = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE no_article = ?";
 	private static final String SAVE = "INSERT INTO ARTICLES_VENDUS " +
             "(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, etat_vente) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -57,12 +57,12 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 	public ArticleVendu findOne(int id) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SELECT_ONE);) {
+			System.out.println("coucou toi");
 			pstmt.setInt(1, id);			
 			ResultSet rs =  pstmt.executeQuery();
 			if(rs.next()) {
 				
 				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
-				
 				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"),
 						rs.getString("pseudo"),
 						rs.getString("nom"),
@@ -108,7 +108,9 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 						rs.getString("code_postal"),
 						rs.getString("ville"),rs.getString("mot_de_passe"), 0, false);
 
-				ArticleVendu article = new ArticleVendu(rs.getString("nom_article"),
+				ArticleVendu article = new ArticleVendu(
+						rs.getInt("no_article"),
+						rs.getString("nom_article"),
 						rs.getString("description"),
 						rs.getDate("date_debut_encheres").toLocalDate(), 
 						rs.getDate("date_fin_encheres").toLocalDate(), 
