@@ -32,13 +32,20 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	public void save(Enchere enchere) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SAVE);) {
+			// valoriser les params de la requete
+			pstmt.setString(1, enchere.getUser().toString());
+			pstmt.setString(2, enchere.getArticle().toString());
+			pstmt.setDate(3,Date.valueOf(enchere.getDateEnchere()));
+			pstmt.setInt(5, enchere.getMontantEnchere());
 
+	
 			// executer la requete
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+
 
 	@Override
 	public Enchere findOne(int id) {
