@@ -11,7 +11,12 @@ public class ArticleVendu {
 	private LocalDate dateFinEncheres;
 	private int prixInitial;
 	private int prixVente;
-	
+	Utilisateur vendeur;
+	Categorie categorie;
+	private String etatVente;
+
+
+
 	public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres,
 			LocalDate dateFinEncheres, int prixInitial, int prixVente, Utilisateur vendeur, Categorie categorie,
 			String etatVente) {
@@ -28,15 +33,10 @@ public class ArticleVendu {
 		this.etatVente = etatVente;
 	}
 
-	Utilisateur vendeur;
-	Categorie categorie;
-	private String etatVente;
-	
-	public ArticleVendu( String nomArticle, String description, LocalDate dateDebutEncheres,
-			LocalDate dateFinEncheres, int prixInitial, int prixVente, Utilisateur vendeur,
-			Categorie categorie, String etatVente) {
+	public ArticleVendu(String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
+			int prixInitial, int prixVente, Utilisateur vendeur, Categorie categorie, String etatVente) {
 		super();
-		
+
 		this.nomArticle = nomArticle;
 		this.description = description;
 		this.dateDebutEncheres = dateDebutEncheres;
@@ -48,12 +48,9 @@ public class ArticleVendu {
 		this.categorie = categorie;
 	}
 
-
-
 	public ArticleVendu() {
 	}
 
-	
 	public int getNoArticle() {
 		return noArticle;
 	}
@@ -118,7 +115,6 @@ public class ArticleVendu {
 		this.etatVente = etatVente;
 	}
 
-
 	public Utilisateur getVendeur() {
 		return vendeur;
 	}
@@ -126,9 +122,13 @@ public class ArticleVendu {
 	public void setVendeur(Utilisateur vendeur) {
 		this.vendeur = vendeur;
 	}
+	public Categorie getCategorie() {
+		return categorie;
+	}
 
-
-
+	public void setCategorie(Categorie categorie) {
+		this.categorie = categorie;
+	}
 	@Override
 	public String toString() {
 		return "ArticleVendu [noArticle=" + noArticle + ", nomArticle=" + nomArticle + ", description=" + description
