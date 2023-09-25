@@ -34,18 +34,20 @@ public class AddEnchereServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
 		HttpSession session = request.getSession();
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 		int id = (int) session.getAttribute("id-article");
-
+		
 		ArticleVendu article = ArticleVenduManager.getInstance().recupUnArticle(id);
 		
 		LocalDate dateEnchere = LocalDate.now();
 		int montantEnchere = Integer.parseInt(request.getParameter("montantEnchere"));
 		
+	
 		Enchere enchere = new Enchere(utilisateur, article, dateEnchere, montantEnchere);
 		
-		EnchereManager.getInstance().ajouterUneEncheree(enchere);
+		EnchereManager.getInstance().trouverUneEnchere(enchere);
 		
 		
 		}

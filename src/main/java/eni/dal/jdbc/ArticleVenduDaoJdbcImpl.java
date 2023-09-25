@@ -43,7 +43,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 			pstmt.setInt(5, article.getPrixInitial());
 			pstmt.setInt(6, article.getPrixVente());
 			pstmt.setInt(7, article.getVendeur().getNoUtilisateur());
-
+			pstmt.setInt(8, article.getCategorie().getNoCategorie());
 			pstmt.setString(9, article.getEtatVente());
 
 	

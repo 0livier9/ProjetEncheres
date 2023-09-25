@@ -6,6 +6,7 @@ import eni.bo.ArticleVendu;
 import eni.bo.Enchere;
 import eni.dal.DaoFactory;
 import eni.dal.EnchereDao;
+import jakarta.servlet.http.HttpSession;
 
 
 public class EnchereManager {
@@ -17,32 +18,36 @@ public class EnchereManager {
 		return instance;
 	}
 	// Fin Singleton
+	
 	private EnchereDao EnchereDao = DaoFactory.getEnchereDao();
-	// début la logique métier
-	public Enchere recupUneEnchere(int id) {
-		return EnchereDao.findOne(id);
-	}
+	
 	
 	public List<Enchere> recupTousLesEncheres() {
 		return EnchereDao.findAll();
 	}
 	
-	public void ajouterUneEncheree(Enchere enchere) {
+	public void trouverUneEnchere(Enchere enchere) {	
 		
-		// datas validation !!
-		EnchereDao.save(enchere);				  	
+		Enchere ancienneEnchere = EnchereDao.findOne(enchere.getArticle().getNoArticle());
+		
+		if (ancienneEnchere==null) {
+			EnchereDao.save(enchere);	
+		}else {
+			EnchereDao.modify(enchere);	
+		}
+					  	
 	}
-	public void modifierUneEnchere(Enchere enchere) {
-		// datas validation !!
-		EnchereDao.modify(enchere);				  	
-	}
-	
-	public void supprimerUneEnchere(int id) {
-		EnchereDao.remove(id);
-	}
-	public List<Enchere> rechercheUneEnchere(String query) {
-		return  EnchereDao.findByName(query) ;
-	}
+//	public void modifierUneEnchere(Enchere enchere) {
+//		// datas validation !!
+//		EnchereDao.modify(enchere);				  	
+//	}
+//	
+//	public void supprimerUneEnchere(int id) {
+//		EnchereDao.remove(id);
+//	}
+//	public List<Enchere> rechercheUneEnchere(String query) {
+//		return  EnchereDao.findByName(query) ;
+//	}
 	
 	// finde la logique métier
 	

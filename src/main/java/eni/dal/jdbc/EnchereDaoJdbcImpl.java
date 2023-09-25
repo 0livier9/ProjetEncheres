@@ -22,10 +22,12 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	// Requetes SQL
 	private static final String SELECT_ALL = "SELECT * FROM ENCHERES INNER JOIN ARTICLES_VENDUS ON ENCHERES.no_article = ARTICLES_VENDUS.no_article \r\n"
 			+ "INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN  UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur=UTILISATEURS.no_utilisateur;";
-	private static final String SELECT_ONE = "SELECT * FROM ENCHERES WHERE no_utilisateur = ? AND no_article=?";
-	private static final String SAVE = "";
+	private static final String SELECT_ONE = "SELECT * FROM ENCHERES INNER JOIN ARTICLES_VENDUS ON ENCHERES.no_article = ARTICLES_VENDUS.no_article \r\n"
+			+ "INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN  UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur=UTILISATEURS.no_utilisateur \r\n"
+			+ "WHERE ENCHERES.no_article=?";
+	private static final String SAVE = "INSERT INTO ENCHERES (no_utilisateur,no_article,date_enchere,montant_enchere) VALUES (?,?,?,?)";
 	private static final String DELETE_ONE = "DELETE ENCHERES WHERE id = ?";
-	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET no_utilisateur=?,no_article=?,date_enchere=?,montant_enchere=? WHERE id = ?";
+	private static final String UPDATE = "UPDATE ENCHERES SET no_utilisateur=?,date_enchere=?,montant_enchere=? WHERE no_article = ?";
 	private static final String FIND_BY_NAME = "SELECT * FROM ENCHERES WHERE no_article LIKE ? ";
 
 	@Override
@@ -33,10 +35,10 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SAVE);) {
 			// valoriser les params de la requete
-			pstmt.setString(1, enchere.getUser().toString());
-			pstmt.setString(2, enchere.getArticle().toString());
+			pstmt.setInt(1, enchere.getUser().getNoUtilisateur());
+			pstmt.setInt(2, enchere.getArticle().getNoArticle());
 			pstmt.setDate(3,Date.valueOf(enchere.getDateEnchere()));
-			pstmt.setInt(5, enchere.getMontantEnchere());
+			pstmt.setInt(4, enchere.getMontantEnchere());
 
 	
 			// executer la requete
@@ -48,14 +50,40 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 
 
 	@Override
-	public Enchere findOne(int id) {
+	public Enchere findOne(int noArticle) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SELECT_ONE);) {
-			pstmt.setInt(1, id);			
+			pstmt.setInt(1, noArticle);
 			ResultSet rs =  pstmt.executeQuery();
 			if(rs.next()) {
-					return new Enchere(null, null);				
+				Utilisateur user = new Utilisateur(rs.getString("pseudo"),
+						rs.getString("nom"),
+						rs.getString("prenom"),
+						rs.getString("email"),
+						rs.getString("telephone"),
+						rs.getString("rue"),
+						rs.getString("code_postal"),
+						rs.getString("ville"),
+						rs.getString("mot_de_passe"));
+				
+				Categorie categorie = new Categorie(rs.getInt("no_categorie"),
+						rs.getString("libelle"));
+				
+				ArticleVendu article = new ArticleVendu(rs.getInt("no_article"),
+						rs.getString("nom_article"), rs.getString("description"),
+						rs.getDate("date_debut_encheres").toLocalDate(),
+						rs.getDate("date_fin_encheres").toLocalDate(),
+						rs.getInt("prix_initial"), 0,
+						user,
+						categorie,
+						rs.getString("etat_vente"));
+
+						Enchere encheres = new Enchere(user, article, rs.getDate("date_enchere").toLocalDate(),
+								rs.getInt("montant_enchere")
+								);
+						return encheres;
 			}			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -111,19 +139,12 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(UPDATE)) {
 
-			// Update Set
-//			pstmt.setString(1, game.getName());
-//			pstmt.setString(2, game.getCompany());
-//			pstmt.setString(3, game.getCategory());
-//			pstmt.setFloat(4, game.getPrice());
-//			pstmt.setDate(5, Date.valueOf(game.getReleaseDate()));
-//			pstmt.setInt(6, game.getAge());
-//			pstmt.setString(7, game.getFormat());
-//			pstmt.setString(8, game.getVersion());
-//			// Where id
-//			pstmt.setInt(9, game.getId());
-//			// execute
-//			pstmt.executeUpdate();
+			pstmt.setInt(1, enchere.getUser().getNoUtilisateur());
+			pstmt.setDate(2, Date.valueOf(enchere.getDateEnchere()));
+			pstmt.setInt(3, enchere.getMontantEnchere());
+			pstmt.setInt(4, enchere.getArticle().getNoArticle());
+			
+			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
