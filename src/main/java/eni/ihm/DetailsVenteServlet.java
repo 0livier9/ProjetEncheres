@@ -10,7 +10,9 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 import eni.bll.ArticleVenduManager;
+import eni.bll.EnchereManager;
 import eni.bo.ArticleVendu;
+import eni.bo.Enchere;
 
 @WebServlet( "/vente/details")
 public class DetailsVenteServlet extends HttpServlet {
@@ -25,8 +27,10 @@ public class DetailsVenteServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("id-article", id);
 			 ArticleVendu article = ArticleVenduManager.getInstance().recupUnArticle(id);
+			 Enchere enchere = EnchereManager.getInstance().trouverUneEnchere(id);
+			 
 			// transmettre l'objet vers la jsp
-			
+			request.setAttribute("enchere", enchere);
 			request.setAttribute("article", article);
 			// forward
 			request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
