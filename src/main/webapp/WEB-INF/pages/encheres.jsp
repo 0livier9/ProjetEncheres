@@ -8,7 +8,7 @@
 		<h1>Liste des Enchères</h1>
 	</div>
 	<div class="col-8 offset-4">
-		<div class=" col-5">
+		<div class=" col-6">
 
 			<form class="d-flex " method="GET" action="">
 				<input class="form-control me-2" type="search" name="q"
