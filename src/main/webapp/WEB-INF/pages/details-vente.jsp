@@ -8,79 +8,78 @@
 		</div>
 		<div class="row mt-5">
 			<div class="col-4 offset-4 mb-4">
+				<c:if test="${ ! empty error }">
+					<div class="alert alert-danger">${ error }</div>
+				</c:if>
 
-				
-					<div class="mb-1">
-						<label for="nom_article" class="form-label">Article:</label> <input
-							type="text" value="${article.getNomArticle()}"
-							readonly="readonly" class="form-control" name="nom_article"
-							id="nom_article">
-					</div>
-					<div class="mb-1">
-						<label for="description" class="form-label">Description:</label> <input
-							type="text" class="form-control" readonly="readonly"
-							name="description" value="${article.getDescription()}"
-							id="description">
-					</div>
-					<div class="mb-1">
-						<label for="categories" class="form-label">Catégorie:</label> <input
-							type="text" value="${article.getCategorie().getLibelle()}"
-							readonly="readonly" class="form-control" name="prix_initial"
-							id="prix_initial">
+				<div class="mb-1">
+					<label for="nom_article" class="form-label">Article:</label> <input
+						type="text" value="${article.getNomArticle()}" readonly="readonly"
+						class="form-control" name="nom_article" id="nom_article">
+				</div>
+				<div class="mb-1">
+					<label for="description" class="form-label">Description:</label> <input
+						type="text" class="form-control" readonly="readonly"
+						name="description" value="${article.getDescription()}"
+						id="description">
+				</div>
+				<div class="mb-1">
+					<label for="categories" class="form-label">Catégorie:</label> <input
+						type="text" value="${article.getCategorie().getLibelle()}"
+						readonly="readonly" class="form-control" name="prix_initial"
+						id="prix_initial">
 
-					</div>
-					<div class="mb-1">
-						<label for="image" class="form-label">Photo de l'article:</label>
-						<!-- <input type="file" readonly="readonly" name="image"
+				</div>
+				<div class="mb-1">
+					<label for="image" class="form-label">Photo de l'article:</label>
+					<!-- <input type="file" readonly="readonly" name="image"
 							accept="image/png, image/gif, image/jpeg" /> -->
-					</div>
+				</div>
+				<div class="mb-3">
+					<label for="prix_initial" class="form-label">Mise à prix:</label> <input
+						type="number" value="${article.getPrixInitial()}"
+						readonly="readonly" class="form-control" name="prix_initial"
+						id="prix_initial">
+				</div>
+
+				<div class="mb-1">
+					<label for="date_fin_encheres" class="form-label">Fin de
+						l'enchères</label> <input type="date"
+						value="${article.getDateFinEncheres()}" readonly="readonly"
+						class="form-control" name="date_fin_encheres"
+						id="date_fin_encheres">
+				</div>
+				<div class="mb-3">
+					<fieldset>
+						<legend>Retrait</legend>
+						<label for="rue" class="form-label">rue</label> <input type="text"
+							readonly="readonly" value="${article.getVendeur().getRue()}"
+							class="form-control" name="rue" id="rue"> <label
+							for="code_postal" class="form-label">Code Postal</label> <input
+							type="text" readonly="readonly"
+							value="${article.getVendeur().getCodePostal()}"
+							class="form-control" name="code_postal" id="code_postal">
+						<label for="ville" class="form-label">Ville</label> <input
+							type="text" readonly="readonly"
+							value="${article.getVendeur().getVille()}" class="form-control"
+							name="ville" id="ville">
+					</fieldset>
+				</div>
+				<div class="mb-3">
+					<label for="vendeur" class="form-label">Vendeur:</label> <input
+						type="text" value="${article.getVendeur().getPseudo()}"
+						readonly="readonly" class="form-control" name="prix_initial"
+						id="prix_initial">
+				</div>
+				<form action="<%=request.getContextPath() + "/encherir"%>"
+					method="POST">
 					<div class="mb-3">
-						<label for="prix_initial" class="form-label">Mise à prix:</label>
-						<input type="number" value="${article.getPrixInitial()}"
-							readonly="readonly" class="form-control" name="prix_initial"
-							id="prix_initial">
+						<label for="montantEnchere" class="form-label">Ma
+							proposition:</label> <input type="number" class="form-control"
+							name="montantEnchere" id="prix_initial">
 					</div>
-				
-					<div class="mb-1">
-						<label for="date_fin_encheres" class="form-label">Fin de
-							l'enchères</label> <input type="date"
-							value="${article.getDateFinEncheres()}" readonly="readonly"
-							class="form-control" name="date_fin_encheres"
-							id="date_fin_encheres">
-					</div>
-					<div class="mb-3">
-						<fieldset>
-							<legend>Retrait</legend>
-							<label for="rue" class="form-label">rue</label> <input
-								type="text" readonly="readonly"
-								value="${article.getVendeur().getRue()}" class="form-control"
-								name="rue" id="rue"> <label for="code_postal"
-								class="form-label">Code Postal</label> <input type="text"
-								readonly="readonly"
-								value="${article.getVendeur().getCodePostal()}"
-								class="form-control" name="code_postal" id="code_postal">
-							<label for="ville" class="form-label">Ville</label> <input
-								type="text" readonly="readonly"
-								value="${article.getVendeur().getVille()}" class="form-control"
-								name="ville" id="ville">
-						</fieldset>
-					</div>
-					<div class="mb-3">
-						<label for="vendeur" class="form-label">Vendeur:</label>
-						<input type="text" value="${article.getVendeur().getPseudo()}"
-							readonly="readonly" class="form-control" name="prix_initial"
-							id="prix_initial">
-					</div>
-					<form action="<%=request.getContextPath()+"/encherir"%>" method="POST">
-					<div class="mb-3">
-					<label for="montantEnchere" class="form-label">Ma proposition:</label>
-					<input type="number" class="form-control" name="montantEnchere"
-							id="prix_initial">	
-					</div>
-					<button class="btn btn-primary" type="submit">
-							Enchérir
-						</button>
-					</form>
+					<button class="btn btn-primary" type="submit">Enchérir</button>
+				</form>
 			</div>
 		</div>
 	</div>

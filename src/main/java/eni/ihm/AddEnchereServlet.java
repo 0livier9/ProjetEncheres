@@ -12,6 +12,7 @@ import java.time.LocalDate;
 
 import eni.bll.ArticleVenduManager;
 import eni.bll.EnchereManager;
+import eni.bll.exception.BLLException;
 import eni.bo.ArticleVendu;
 import eni.bo.Enchere;
 import eni.bo.Utilisateur;
@@ -47,8 +48,18 @@ public class AddEnchereServlet extends HttpServlet {
 	
 		Enchere enchere = new Enchere(utilisateur, article, dateEnchere, montantEnchere);
 		
-		EnchereManager.getInstance().ajouterUneEnchere(enchere);
+		request.setAttribute("article", article);
 		
+		try {
+			EnchereManager.getInstance().ajouterUneEnchere(enchere);
+			
+		} catch (BLLException e) {
+			request.setAttribute("error", e.getMessage());
+			
+			request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
+			e.printStackTrace();
+		}
+		request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
 		
 		}
 	

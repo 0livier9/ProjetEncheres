@@ -29,6 +29,7 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 	private static final String DELETE_ONE = "DELETE ENCHERES WHERE id = ?";
 	private static final String UPDATE = "UPDATE ENCHERES SET no_utilisateur=?,date_enchere=?,montant_enchere=? WHERE no_article = ?";
 	private static final String FIND_BY_NAME = "SELECT * FROM ENCHERES WHERE no_article LIKE ? ";
+	
 
 	@Override
 	public void save(Enchere enchere) {
@@ -56,7 +57,8 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 			pstmt.setInt(1, noArticle);
 			ResultSet rs =  pstmt.executeQuery();
 			if(rs.next()) {
-				Utilisateur user = new Utilisateur(rs.getString("pseudo"),
+				Utilisateur user = new Utilisateur(rs.getInt("no_utilisateur"),
+						rs.getString("pseudo"),
 						rs.getString("nom"),
 						rs.getString("prenom"),
 						rs.getString("email"),
@@ -64,7 +66,10 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 						rs.getString("rue"),
 						rs.getString("code_postal"),
 						rs.getString("ville"),
-						rs.getString("mot_de_passe"));
+						rs.getString("mot_de_passe"),
+						rs.getInt("credit"),
+						rs.getBoolean("administrateur")
+						);
 				
 				Categorie categorie = new Categorie(rs.getInt("no_categorie"),
 						rs.getString("libelle"));
@@ -191,4 +196,6 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 		return null;
 
 	}
+	
+	
 }

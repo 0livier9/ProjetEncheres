@@ -20,7 +20,8 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 	private static final String SELECT_BY_ID = "SELECT * FROM UTILISATEURS WHERE no_utilisateur = ?";
 	private static final String DELETE_USER = "DELETE UTILISATEURS WHERE pseudo = ?";
 	private static final String UPDATE = "UPDATE UTILISATEURS SET pseudo=?,nom=?,prenom=?,email=?,telephone=?,rue=?,code_postal=?,ville=?,mot_de_passe=?,credit=?,administrateur=? WHERE no_utilisateur = ?";
-
+	private static final String UPDATE_CREDIT = "UPDATE UTILISATEURS SET credit=? WHERE no_utilisateur = ?";
+	
 	@Override
 	public void save(Utilisateur utilisateur) throws JDBCException {
 		try(
@@ -212,6 +213,23 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 			pstmt.setBoolean(11, utilisateur.isAdministrateur());
 			
 			pstmt.setInt(12, utilisateur.getNoUtilisateur());
+			
+			pstmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void modifyCredit(int nouveauCredit, int noUtilisateur) {
+		try(
+				Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(UPDATE_CREDIT)
+				){
+			
+			pstmt.setInt(1, nouveauCredit);
+			pstmt.setInt(2, noUtilisateur);
 			
 			pstmt.executeUpdate();
 			
