@@ -2,7 +2,10 @@
 package eni.dal.jdbc;
 
 import eni.dal.jdbc.*;
+import jakarta.security.auth.message.callback.PrivateKeyCallback.Request;
 import eni.dal.*;
+
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -28,7 +31,11 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String DELETE_ONE = "DELETE ENCHERES WHERE id = ?";
 	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET no_utilisateur=?,no_article=?,date_enchere=?,montant_enchere=? WHERE id = ?";
-	private static final String FIND_BY_NAME = "SELECT * FROM ARTICLES_VENDUS WHERE nom_article LIKE ? ";
+	private static final String FIND_BY_NAME = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie "
+			+ "INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE nom_article LIKE ? ";
+	
+	private static final String FIND_BY_CAT = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie"
+			+ " INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE CATEGORIES.no_categorie = ?";
 
 	@Override
 	public void save(ArticleVendu article) {
@@ -207,4 +214,44 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		return null;
 
 	}
+	@Override
+	public List<ArticleVendu> findByCat(int categoryId) {
+	    try (Connection connection = ConnectionProvider.getConnection();
+	            PreparedStatement pstmt = connection.prepareStatement(FIND_BY_CAT)) {
+	        pstmt.setInt(1, categoryId);  
+
+	        List<ArticleVendu> articles = new ArrayList<>();
+	        ResultSet rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            Categorie categorie = new Categorie(rs.getInt("no_categorie"),rs.getString("libelle"));
+
+	            Utilisateur vendeur = new Utilisateur(
+	                    rs.getInt("no_utilisateur"),
+	                    rs.getString("pseudo"),
+	                    rs.getString("nom"),
+	                    rs.getString("prenom"),
+	                    rs.getString("email"),
+	                    rs.getString("telephone"),
+	                    rs.getString("rue"),
+	                    rs.getString("code_postal"),
+	                    rs.getString("ville"),
+	                    rs.getString("mot_de_passe"), 0, false);
+
+	            articles.add(new ArticleVendu(
+	                    rs.getString("nom_article"),
+	                    rs.getString("description"),
+	                    rs.getDate("date_debut_encheres").toLocalDate(),
+	                    rs.getDate("date_fin_encheres").toLocalDate(),
+	                    rs.getInt("prix_initial"),
+	                    rs.getInt("prix_vente"), vendeur, categorie,
+	                    rs.getString("etat_vente")));
+	        }
+	        return articles;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+
 }

@@ -36,7 +36,7 @@ public class EnchereDaoJdbcImpl implements EnchereDao {
 			pstmt.setString(1, enchere.getUser().toString());
 			pstmt.setString(2, enchere.getArticle().toString());
 			pstmt.setDate(3,Date.valueOf(enchere.getDateEnchere()));
-			pstmt.setInt(5, enchere.getMontantEnchere());
+			pstmt.setInt(4, enchere.getMontantEnchere());
 
 	
 			// executer la requete

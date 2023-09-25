@@ -22,8 +22,8 @@ import java.io.IOException;
 		urlPatterns = {
 				"/encheres/ajouter",
 				"/deconnexion",
-				"/modification",
-				"/profil"
+				"/profil",
+				"/vente/details"
 		}
 		)
 public class GuardAuthFilter extends HttpFilter implements Filter {
