@@ -44,7 +44,9 @@ public class ArticleVenduManager {
 	public List<ArticleVendu> rechercheUnArticle(String query) {
 		return  ArticleVenduDao.findByName(query) ;
 	}
-	
+	public List<ArticleVendu> rechercheUnArticleParCate(int categoryId) {
+		return  ArticleVenduDao.findByCat(categoryId) ;
+	}
 	// finde la logique métier
 	
 	

@@ -13,4 +13,5 @@ public interface ArticleVenduDao {
 	void modify(ArticleVendu article);
 	void remove(int id);
 	List<ArticleVendu> findByName(String query);
+	List<ArticleVendu> findByCat(int query);
 }

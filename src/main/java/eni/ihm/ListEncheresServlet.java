@@ -1,4 +1,4 @@
-	package eni.ihm;
+package eni.ihm;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -22,23 +22,38 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ListEncheresServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
 
-
 		List<ArticleVendu> articles = null;
-		
-		if(request.getParameter("q")!=null) {
+		String selectedCategory = request.getParameter("categories");
+
+		if (request.getParameter("q") != null) {
 			articles = ArticleVenduManager.getInstance().rechercheUnArticle(request.getParameter("q"));
-		}else {
-			articles = ArticleVenduManager.getInstance().recupTousLesArticles();
-		}		
+		}else if (selectedCategory != null && !selectedCategory.isEmpty()) {
+			int categoryId = Integer.parseInt(selectedCategory);
+			articles = ArticleVenduManager.getInstance().rechercheUnArticleParCate(categoryId);
+		} 
 		
+		else {
+			articles = ArticleVenduManager.getInstance().recupTousLesArticles();
+		}
+
+//		List<ArticleVendu> filteredArticles;
+//		if (selectedCategory != null && !selectedCategory.isEmpty()) {
+//			int categoryId = Integer.parseInt(selectedCategory);
+//			filteredArticles = ArticleVenduManager.getInstance().rechercheUnArticleParCate(categoryId);
+//		} else {
+//			filteredArticles = ArticleVenduManager.getInstance().recupTousLesArticles();
+//		}
+//		
+//		request.setAttribute("articles", filteredArticles);
+
 		request.setAttribute("categories", categories);
 		request.setAttribute("articles", articles);
-		
+
 		request.setAttribute("annee", LocalDate.now().getYear());
-		request.getRequestDispatcher("/WEB-INF/pages/encheres.jsp")
-		       .forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/pages/encheres.jsp").forward(request, response);
 	}
 }
