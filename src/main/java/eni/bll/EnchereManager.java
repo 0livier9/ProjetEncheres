@@ -26,7 +26,7 @@ public class EnchereManager {
 		return EnchereDao.findAll();
 	}
 	
-	public void trouverUneEnchere(Enchere enchere) {	
+	public void ajouterUneEnchere(Enchere enchere) {	
 		
 		Enchere ancienneEnchere = EnchereDao.findOne(enchere.getArticle().getNoArticle());
 		
@@ -37,6 +37,12 @@ public class EnchereManager {
 		}
 					  	
 	}
+	
+	public Enchere trouverUneEnchere(int noArticle) {
+		Enchere enchere = EnchereDao.findOne(noArticle);
+		return enchere;
+	}
+	
 //	public void modifierUneEnchere(Enchere enchere) {
 //		// datas validation !!
 //		EnchereDao.modify(enchere);				  	
