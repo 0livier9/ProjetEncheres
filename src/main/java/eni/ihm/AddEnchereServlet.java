@@ -47,7 +47,7 @@ public class AddEnchereServlet extends HttpServlet {
 	
 		Enchere enchere = new Enchere(utilisateur, article, dateEnchere, montantEnchere);
 		
-		EnchereManager.getInstance().trouverUneEnchere(enchere);
+		EnchereManager.getInstance().ajouterUneEnchere(enchere);
 		
 		
 		}
