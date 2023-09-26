@@ -34,6 +34,7 @@ public class ListEncheresServlet extends HttpServlet {
 		}else if (selectedCategory != null && !selectedCategory.isEmpty()) {
 			int categoryId = Integer.parseInt(selectedCategory);
 			articles = ArticleVenduManager.getInstance().rechercheUnArticleParCate(categoryId);
+			
 		} 
 		
 		else {

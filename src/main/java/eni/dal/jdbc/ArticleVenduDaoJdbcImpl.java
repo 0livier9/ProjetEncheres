@@ -196,7 +196,9 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 				articles.add(
 						
 
-						new ArticleVendu(rs.getString("nom_article"),
+						new ArticleVendu(
+								rs.getInt("no_article"),
+								rs.getString("nom_article"),
 								rs.getString("description"),
 								rs.getDate("date_debut_encheres").toLocalDate(), 
 								rs.getDate("date_fin_encheres").toLocalDate(), 
@@ -240,6 +242,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 	                    rs.getString("mot_de_passe"), 0, false);
 
 	            articles.add(new ArticleVendu(
+	            		rs.getInt("no_article"),
 	                    rs.getString("nom_article"),
 	                    rs.getString("description"),
 	                    rs.getDate("date_debut_encheres").toLocalDate(),
