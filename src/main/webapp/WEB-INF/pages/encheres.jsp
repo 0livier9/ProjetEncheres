@@ -58,7 +58,7 @@
 						</div>
 						<div class="container ck-achats">
 							<div class="form-check">
-							  <input class="form-check-input" type="checkbox" value="" id="eo">
+							  <input class="form-check-input" name="ec" type="checkbox" value="" id="eo">
 							  <label class="form-check-label" for="eo">
 							    Enchères ouvertes
 							  </label>

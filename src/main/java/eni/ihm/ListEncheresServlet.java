@@ -31,6 +31,7 @@ public class ListEncheresServlet extends HttpServlet {
 		List<ArticleVendu> articles = null;
 		String selectedCategory = request.getParameter("categories");
 		String mvec = request.getParameter("mvec");
+		String ec = request.getParameter("ec");
 
 		if (request.getParameter("q") != null) {
 			articles = ArticleVenduManager.getInstance().rechercheUnArticle(request.getParameter("q"));
@@ -48,10 +49,14 @@ public class ListEncheresServlet extends HttpServlet {
 			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 			int noUtilisateur = utilisateur.getNoUtilisateur();
 			articles = ArticleVenduManager.getInstance().findbyUser(noUtilisateur);
+		} else if (ec != null) {
+			articles= ArticleVenduManager.getInstance().rechercheUnArticleParEtat(ec);
+			System.out.println(articles);
 		}
 
 		else {
 			articles = ArticleVenduManager.getInstance().recupTousLesArticles();
+			
 		}
 
 		request.setAttribute("categories", categories);
