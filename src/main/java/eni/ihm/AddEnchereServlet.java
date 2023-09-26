@@ -34,7 +34,7 @@ public class AddEnchereServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 		HttpSession session = request.getSession();
-		int ancienneEnchere = (int) session.getAttribute("ancienneEnchere");
+	//	int ancienneEnchere = (int) session.getAttribute("ancienneEnchere");
 		
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 		int id = (int) session.getAttribute("id-article");
@@ -55,7 +55,7 @@ public class AddEnchereServlet extends HttpServlet {
 			EnchereManager.getInstance().ajouterUneEnchere(enchere);
 			
 		} catch (BLLException e) {
-			enchere.setMontantEnchere(ancienneEnchere);
+			//enchere.setMontantEnchere(ancienneEnchere);
 			request.setAttribute("enchere", enchere);
 			request.setAttribute("error", e.getMessage());
 			request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);

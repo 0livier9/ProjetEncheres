@@ -32,12 +32,15 @@ public class DetailsVenteServlet extends HttpServlet {
 			// transmettre l'objet vers la jsp
 			request.setAttribute("enchere", enchere);
 			request.setAttribute("article", article);
-			session.setAttribute("ancienneEnchere", enchere.getMontantEnchere());
+			if (enchere != null) {
+				
+				session.setAttribute("ancienneEnchere", enchere.getMontantEnchere());
+			}
 			// forward
 			request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
 		} catch (Exception e) {
 
-			response.sendError(404);
+			e.printStackTrace();
 		}
 
 	}

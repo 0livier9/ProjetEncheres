@@ -37,6 +37,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 			+ " INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE CATEGORIES.no_categorie = ?";
 	private static final String UPDATE_ETAT_VENTE = "UPDATE ARTICLES_VENDUS SET etat_vente=? WHERE no_article = ?";
 	private static final String FIND_BY_ETAT = "SELECT * FROM ARTICLES_VENDUS WHERE etat_vente=?";
+	private static final String FIND_BY_USER = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE ARTICLES_VENDUS.no_utilisateur=?";
 
 	@Override
 	public void save(ArticleVendu article) {
@@ -263,4 +264,31 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		return null;
 	}
 
+	public List<ArticleVendu> findbyUser ( int noUtilisateur){
+		try (Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_USER)) {
+			pstmt.setInt(1, noUtilisateur);
+
+			List<ArticleVendu> articles = new ArrayList<>();
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
+
+				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"), rs.getString("pseudo"),
+						rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getString("telephone"),
+						rs.getString("rue"), rs.getString("code_postal"), rs.getString("ville"),
+						rs.getString("mot_de_passe"), 0, false);
+
+				articles.add(new ArticleVendu(rs.getInt("no_article"), rs.getString("nom_article"),
+						rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
+						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
+						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente")));
+			}
+			return articles;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

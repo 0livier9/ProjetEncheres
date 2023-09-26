@@ -50,5 +50,7 @@ public class ArticleVenduManager {
 	public List<ArticleVendu> rechercheUnArticleParEtat (String etatVente){
 		return ArticleVenduDao.findByEtatVente(etatVente);
 	}
-	
+	public List<ArticleVendu> findbyUser ( int noUtilisateur){
+		return ArticleVenduDao.findbyUser(noUtilisateur);
+	}
 }

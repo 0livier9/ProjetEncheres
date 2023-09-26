@@ -17,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("")
 public class ListEncheresServlet extends HttpServlet {
@@ -24,6 +25,7 @@ public class ListEncheresServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession session = request.getSession();
 		List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
 
 		List<ArticleVendu> articles = null;
@@ -32,24 +34,26 @@ public class ListEncheresServlet extends HttpServlet {
 
 		if (request.getParameter("q") != null) {
 			articles = ArticleVenduManager.getInstance().rechercheUnArticle(request.getParameter("q"));
-		}else if (selectedCategory != null && !selectedCategory.isEmpty()) {
+		} else if (selectedCategory != null && !selectedCategory.isEmpty()
+				&& !selectedCategory.equals("Selectionner une categorie")) {
 			int categoryId = Integer.parseInt(selectedCategory);
 			articles = ArticleVenduManager.getInstance().rechercheUnArticleParCate(categoryId);
-			
+
+		} else if (mvec != null) {
+			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+			int noUtilisateur = utilisateur.getNoUtilisateur();
+			articles = ArticleVenduManager.getInstance().findbyUser(noUtilisateur);
 		}
-		
+
 		else {
 			articles = ArticleVenduManager.getInstance().recupTousLesArticles();
 		}
-
-	
 
 		request.setAttribute("categories", categories);
 		request.setAttribute("articles", articles);
 
 		request.setAttribute("annee", LocalDate.now().getYear());
 		request.getRequestDispatcher("/WEB-INF/pages/encheres.jsp").forward(request, response);
-		
-		
+
 	}
 }
