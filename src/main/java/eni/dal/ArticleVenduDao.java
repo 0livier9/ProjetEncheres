@@ -15,6 +15,6 @@ public interface ArticleVenduDao {
 	List<ArticleVendu> findByName(String query);
 	List<ArticleVendu> findByCat(int query);
 	public void modifyEtat(String etatVente, int noArticle);
-	public List<ArticleVendu> findByEtatVente(String etatVente);
+	public List<ArticleVendu> findByEtatVente(String etatVente,int noAcheteur);
 	public List<ArticleVendu> findbyUser ( int noUtilisateur);
 }

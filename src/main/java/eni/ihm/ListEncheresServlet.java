@@ -54,10 +54,14 @@ public class ListEncheresServlet extends HttpServlet {
 			int noUtilisateur = utilisateur.getNoUtilisateur();
 			articles = ArticleVenduManager.getInstance().findbyUser(noUtilisateur);
 		} else if (etat != null) {
-			articles= ArticleVenduManager.getInstance().rechercheUnArticleParEtat(etat);
+			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+			int noUtilisateur = utilisateur.getNoUtilisateur();
+			articles= ArticleVenduManager.getInstance().rechercheUnArticleParEtat(etat, noUtilisateur);
 		
 		}else if (ventes != null) {
-			articles= ArticleVenduManager.getInstance().rechercheUnArticleParEtat(ventes);
+			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+			int noUtilisateur = utilisateur.getNoUtilisateur();
+			articles= ArticleVenduManager.getInstance().rechercheUnArticleParEtat(ventes,noUtilisateur);
 
 		}
 

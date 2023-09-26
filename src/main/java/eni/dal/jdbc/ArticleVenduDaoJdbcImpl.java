@@ -36,7 +36,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 	private static final String FIND_BY_CAT = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie"
 			+ " INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE CATEGORIES.no_categorie = ?";
 	private static final String UPDATE_ETAT_VENTE = "UPDATE ARTICLES_VENDUS SET etat_vente=? WHERE no_article = ?";
-	private static final String FIND_BY_ETAT = "SELECT * FROM ARTICLES_VENDUS  INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente=?";
+	private static final String FIND_BY_ETAT = "SELECT * FROM ARTICLES_VENDUS INNER JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente=? AND ENCHERES.no_utilisateur=?";
 	private static final String FIND_BY_USER = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE ARTICLES_VENDUS.no_utilisateur=?";
 	
 	public void save(ArticleVendu article) {
@@ -232,13 +232,13 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		}
 	}
 
-	public List<ArticleVendu> findByEtatVente(String etatVente) {
+	public List<ArticleVendu> findByEtatVente(String etatVente, int noAcheteur) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_ETAT);) {
 
 			
-			System.out.println(etatVente);
 			pstmt.setString(1, etatVente);
+			pstmt.setInt(2, noAcheteur);
 			ResultSet rs = pstmt.executeQuery();
 
 			List<ArticleVendu> articles = new ArrayList<ArticleVendu>();
