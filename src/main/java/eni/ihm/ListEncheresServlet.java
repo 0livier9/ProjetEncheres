@@ -40,11 +40,7 @@ public class ListEncheresServlet extends HttpServlet {
 		if (request.getParameter("q") != null) {
 			articles = ArticleVenduManager.getInstance().rechercheUnArticle(request.getParameter("q"));
 
-		}
-		if (selectedCategory != null && !selectedCategory.isEmpty() && !selectedCategory.equals("Selectionner une categorie")) {
-
-		} else if (selectedCategory != null && !selectedCategory.isEmpty()
-				&& !selectedCategory.equals("Selectionner une categorie")) {
+		} else if (selectedCategory != null && !selectedCategory.isEmpty()&& !selectedCategory.equals("Selectionner une categorie")) {
 
 			int categoryId = Integer.parseInt(selectedCategory);
 			articles = ArticleVenduManager.getInstance().rechercheUnArticleParCate(categoryId);
