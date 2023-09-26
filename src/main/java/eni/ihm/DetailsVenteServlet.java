@@ -8,11 +8,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import eni.bll.ArticleVenduManager;
 import eni.bll.EnchereManager;
+import eni.bll.exception.BLLException;
 import eni.bo.ArticleVendu;
 import eni.bo.Enchere;
+import eni.bo.Utilisateur;
 
 @WebServlet( "/vente/details")
 public class DetailsVenteServlet extends HttpServlet {
@@ -20,7 +23,7 @@ public class DetailsVenteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		try {
+	
 			// récupérer le param dans url
 			int id = Integer.parseInt(request.getParameter("id") );
 			// récupérer l'objet article
@@ -32,21 +35,53 @@ public class DetailsVenteServlet extends HttpServlet {
 			// transmettre l'objet vers la jsp
 			request.setAttribute("enchere", enchere);
 			request.setAttribute("article", article);
-			session.setAttribute("ancienneEnchere", enchere.getMontantEnchere());
+			System.out.println(enchere);
+
+				session.setAttribute("ancienneEnchere", enchere.getMontantEnchere());
+			
+			
 			// forward
 			request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
-		} catch (Exception e) {
-
-			response.sendError(404);
-		}
-
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+HttpSession session = request.getSession();
+		
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+		int id = (int) session.getAttribute("id-article");
+		
+		ArticleVendu article = ArticleVenduManager.getInstance().recupUnArticle(id);
+		
+		LocalDate dateEnchere = LocalDate.now();
+		int montantEnchere = Integer.parseInt(request.getParameter("montantEnchere"));
+		
+	
+		Enchere enchere = new Enchere(utilisateur, article, dateEnchere, montantEnchere);
+		
+		request.setAttribute("article", article);
+		int numeroArticle = Integer.parseInt(request.getParameter("id"));
 		
 		
+		try {
+			
+			EnchereManager.getInstance().ajouterUneEnchere(enchere);
+			
+		} catch (BLLException e) {
+//			enchere.setMontantEnchere(ancienneEnchere);
+			request.setAttribute("enchere", enchere);
+			request.setAttribute("error", e.getMessage());
+			response.sendRedirect(request.getContextPath()+"/vente/details?id="+numeroArticle);
+			//request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
+			e.printStackTrace();
+			return;
+		}
+		request.setAttribute("enchere", enchere);
+		request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
+		
+		
+	
 	}
 
 }

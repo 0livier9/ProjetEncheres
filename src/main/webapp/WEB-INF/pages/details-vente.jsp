@@ -82,7 +82,7 @@
 							readonly="readonly" class="form-control" name="prix_initial"
 							id="prix_initial">
 					</div>
-					<form action="<%=request.getContextPath() + "/encherir"%>"
+					<form action="${ pageContext.request.contextPath }/encherir?id=${enchere.getArticle().getNoArticle()}"
 						method="POST">
 						<div class="mb-3">
 							<label for="montantEnchere" class="form-label">Ma
