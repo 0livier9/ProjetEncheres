@@ -28,6 +28,7 @@ public class ListEncheresServlet extends HttpServlet {
 
 		List<ArticleVendu> articles = null;
 		String selectedCategory = request.getParameter("categories");
+		String mvec = request.getParameter("mvec");
 
 		if (request.getParameter("q") != null) {
 			articles = ArticleVenduManager.getInstance().rechercheUnArticle(request.getParameter("q"));
@@ -35,17 +36,20 @@ public class ListEncheresServlet extends HttpServlet {
 			int categoryId = Integer.parseInt(selectedCategory);
 			articles = ArticleVenduManager.getInstance().rechercheUnArticleParCate(categoryId);
 			
-		} 
+		}
 		
 		else {
 			articles = ArticleVenduManager.getInstance().recupTousLesArticles();
 		}
 
+	
 
 		request.setAttribute("categories", categories);
 		request.setAttribute("articles", articles);
 
 		request.setAttribute("annee", LocalDate.now().getYear());
 		request.getRequestDispatcher("/WEB-INF/pages/encheres.jsp").forward(request, response);
+		
+		
 	}
 }

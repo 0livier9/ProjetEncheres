@@ -42,11 +42,6 @@ public class EnchereManager {
 				throw new BLLException("Vous avez déjà la meilleur enchère");
 			}
 
-			System.out.println(enchere.getMontantEnchere());
-			System.out.println(ancienneEnchere.getMontantEnchere());
-			System.out.println(enchere.getUser().getCredit());
-			System.out.println(enchere.getMontantEnchere());
-
 			if (enchere.getMontantEnchere() > ancienneEnchere.getMontantEnchere()
 					&& enchere.getUser().getCredit() >= enchere.getMontantEnchere()) {
 				int nouveauCredit = enchere.getUser().getCredit() - enchere.getMontantEnchere();
@@ -71,19 +66,5 @@ public class EnchereManager {
 		Enchere enchere = enchereDao.findOne(noArticle);
 		return enchere;
 	}
-
-//	public void modifierUneEnchere(Enchere enchere) {
-//		// datas validation !!
-//		EnchereDao.modify(enchere);				  	
-//	}
-//	
-//	public void supprimerUneEnchere(int id) {
-//		EnchereDao.remove(id);
-//	}
-//	public List<Enchere> rechercheUneEnchere(String query) {
-//		return  EnchereDao.findByName(query) ;
-//	}
-
-	// finde la logique métier
 
 }

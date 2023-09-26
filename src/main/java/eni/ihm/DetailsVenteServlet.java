@@ -26,12 +26,13 @@ public class DetailsVenteServlet extends HttpServlet {
 			// récupérer l'objet article
 			HttpSession session = request.getSession();
 			session.setAttribute("id-article", id);
+			
 			 ArticleVendu article = ArticleVenduManager.getInstance().recupUnArticle(id);
 			 Enchere enchere = EnchereManager.getInstance().trouverUneEnchere(id);
-			 System.out.println(id);
 			// transmettre l'objet vers la jsp
 			request.setAttribute("enchere", enchere);
 			request.setAttribute("article", article);
+			session.setAttribute("ancienneEnchere", enchere.getMontantEnchere());
 			// forward
 			request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
 		} catch (Exception e) {

@@ -10,16 +10,14 @@ import eni.dal.EnchereDao;
 
 
 public class ArticleVenduManager {
-	// début Singleton
+
 	private static ArticleVenduManager instance;
 	private ArticleVenduManager() {}
 	public static ArticleVenduManager getInstance() {
 		if(instance==null) instance = new ArticleVenduManager();
 		return instance;
 	}
-	// Fin Singleton
 	private ArticleVenduDao ArticleVenduDao = DaoFactory.getArticleVendueDao();
-	// début la logique métier
 	public ArticleVendu recupUnArticle(int id) {
 		return ArticleVenduDao.findOne(id);
 	}
@@ -29,12 +27,9 @@ public class ArticleVenduManager {
 	}
 	
 	public void ajouterUneVente(ArticleVendu article) {
-		
-		// datas validation !!
 		ArticleVenduDao.save(article);				  	
 	}
 	public void modifierUnArticle(ArticleVendu article) {
-		// datas validation !!
 		ArticleVenduDao.modify(article);				  	
 	}
 	
@@ -47,7 +42,13 @@ public class ArticleVenduManager {
 	public List<ArticleVendu> rechercheUnArticleParCate(int categoryId) {
 		return  ArticleVenduDao.findByCat(categoryId) ;
 	}
-	// finde la logique métier
 	
+	public void modifierEtatVente(String etatVente, int noArticle) {
+		ArticleVenduDao.modifyEtat(etatVente, noArticle);
+	}
+	
+	public List<ArticleVendu> rechercheUnArticleParEtat (String etatVente){
+		return ArticleVenduDao.findByEtatVente(etatVente);
+	}
 	
 }

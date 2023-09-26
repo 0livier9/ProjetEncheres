@@ -44,6 +44,7 @@
 			</form>
 		</div>
 		<div class="row mt-5 mb-5">
+		<c:if test="${ utilisateur != null }">
   		<div class="col-6">
   			<div class="container-fluid">
   				<div class="row">
@@ -84,7 +85,7 @@
 						</div> 
 						<div class="container ck-ventes">
 							<div class="form-check">
-							  <input class="form-check-input" disabled type="checkbox" value="" id="mvec">
+							  <input name="mvec" class="form-check-input" disabled type="checkbox"  id="mvec">
 							  <label class="form-check-label" for="mvec">
 							    Mes vente en cours
 							  </label>
@@ -106,6 +107,7 @@
   				</div>
   			</div>
   		</div>
+  		</c:if>
   	</div>
 		
 	</div>

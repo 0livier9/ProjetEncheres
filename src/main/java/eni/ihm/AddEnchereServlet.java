@@ -28,15 +28,14 @@ public class AddEnchereServlet extends HttpServlet {
 
 		int noUtilisateur = utilisateur.getNoUtilisateur(); // On récupérer le numéro de l'utilisateur
 		
-		
-		
 		request.getRequestDispatcher("/WEB-INF/pages/mon-profil.jsp");
 	}
-
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 		HttpSession session = request.getSession();
+		int ancienneEnchere = (int) session.getAttribute("ancienneEnchere");
+		
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 		int id = (int) session.getAttribute("id-article");
 		
@@ -50,15 +49,19 @@ public class AddEnchereServlet extends HttpServlet {
 		
 		request.setAttribute("article", article);
 		
+		
 		try {
+			
 			EnchereManager.getInstance().ajouterUneEnchere(enchere);
 			
 		} catch (BLLException e) {
+			enchere.setMontantEnchere(ancienneEnchere);
+			request.setAttribute("enchere", enchere);
 			request.setAttribute("error", e.getMessage());
-			
 			request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
 			e.printStackTrace();
 		}
+		request.setAttribute("enchere", enchere);
 		request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
 		
 		}

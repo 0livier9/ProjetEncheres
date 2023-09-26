@@ -5,7 +5,6 @@ import eni.dal.jdbc.*;
 import jakarta.security.auth.message.callback.PrivateKeyCallback.Request;
 import eni.dal.*;
 
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -26,26 +25,28 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 	// Requetes SQL
 	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur";
 	private static final String SELECT_ONE = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE no_article = ?";
-	private static final String SAVE = "INSERT INTO ARTICLES_VENDUS " +
-            "(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, etat_vente) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String SAVE = "INSERT INTO ARTICLES_VENDUS "
+			+ "(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, etat_vente) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String DELETE_ONE = "DELETE ENCHERES WHERE id = ?";
 	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET no_utilisateur=?,no_article=?,date_enchere=?,montant_enchere=? WHERE id = ?";
 	private static final String FIND_BY_NAME = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie "
 			+ "INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE nom_article LIKE ? ";
-	
+
 	private static final String FIND_BY_CAT = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie"
 			+ " INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE CATEGORIES.no_categorie = ?";
+	private static final String UPDATE_ETAT_VENTE = "UPDATE ARTICLES_VENDUS SET etat_vente=? WHERE no_article = ?";
+	private static final String FIND_BY_ETAT = "SELECT * FROM ARTICLES_VENDUS WHERE etat_vente=?";
 
 	@Override
 	public void save(ArticleVendu article) {
-	
+
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SAVE);) {
 			// valoriser les params de la requete
 			pstmt.setString(1, article.getNomArticle());
 			pstmt.setString(2, article.getDescription());
-			pstmt.setDate(3,Date.valueOf(article.getDateDebutEncheres()));
+			pstmt.setDate(3, Date.valueOf(article.getDateDebutEncheres()));
 			pstmt.setDate(4, Date.valueOf(article.getDateFinEncheres()));
 			pstmt.setInt(5, article.getPrixInitial());
 			pstmt.setInt(6, article.getPrixVente());
@@ -53,7 +54,6 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 			pstmt.setInt(8, article.getCategorie().getNoCategorie());
 			pstmt.setString(9, article.getEtatVente());
 
-	
 			// executer la requete
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -66,30 +66,21 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SELECT_ONE);) {
 
-			pstmt.setInt(1, id);			
-			ResultSet rs =  pstmt.executeQuery();
-			if(rs.next()) {
-				
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+
 				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
-				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"),
-						rs.getString("pseudo"),
-						rs.getString("nom"),
-						rs.getString("prenom"),
-						rs.getString("email"), 
-						rs.getString("telephone"),
-						rs.getString("rue"),
-						rs.getString("code_postal"),
-						rs.getString("ville"),rs.getString("mot_de_passe"), 0, false);
-				
-				
-					return  new ArticleVendu(rs.getInt("no_article"),rs.getString("nom_article"),
-							rs.getString("description"),
-							rs.getDate("date_debut_encheres").toLocalDate(), 
-							rs.getDate("date_fin_encheres").toLocalDate(), 
-							rs.getInt("prix_initial"),
-							rs.getInt("prix_vente"), vendeur, categorie,
-							rs.getString("etat_vente"));			
-			}			
+				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"), rs.getString("pseudo"),
+						rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getString("telephone"),
+						rs.getString("rue"), rs.getString("code_postal"), rs.getString("ville"),
+						rs.getString("mot_de_passe"), 0, false);
+
+				return new ArticleVendu(rs.getInt("no_article"), rs.getString("nom_article"),
+						rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
+						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
+						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente"));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -103,29 +94,19 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 			List<ArticleVendu> articles = new ArrayList<ArticleVendu>();
 			ResultSet rs = stmt.executeQuery(SELECT_ALL);
 			while (rs.next()) {
-				
-				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
-				
-				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"),
-						rs.getString("pseudo"),
-						rs.getString("nom"),
-						rs.getString("prenom"),
-						rs.getString("email"), 
-						rs.getString("telephone"),
-						rs.getString("rue"),
-						rs.getString("code_postal"),
-						rs.getString("ville"),rs.getString("mot_de_passe"), 0, false);
 
-				ArticleVendu article = new ArticleVendu(
-						rs.getInt("no_article"),
-						rs.getString("nom_article"),
-						rs.getString("description"),
-						rs.getDate("date_debut_encheres").toLocalDate(), 
-						rs.getDate("date_fin_encheres").toLocalDate(), 
-						rs.getInt("prix_initial"),
-						rs.getInt("prix_vente"), vendeur, categorie,
-						rs.getString("etat_vente"));
-				
+				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
+
+				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"), rs.getString("pseudo"),
+						rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getString("telephone"),
+						rs.getString("rue"), rs.getString("code_postal"), rs.getString("ville"),
+						rs.getString("mot_de_passe"), 0, false);
+
+				ArticleVendu article = new ArticleVendu(rs.getInt("no_article"), rs.getString("nom_article"),
+						rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
+						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
+						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente"));
+
 				articles.add(article);
 
 			}
@@ -178,84 +159,108 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_NAME)) {
 			pstmt.setString(1, "%" + query + "%");
 			List<ArticleVendu> articles = new ArrayList<ArticleVendu>();
-			
+
 			ResultSet rs = pstmt.executeQuery();
-		
+
 			while (rs.next()) {
 				Categorie categorie = new Categorie();
-				
-				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"),
-						rs.getString("pseudo"),
-						rs.getString("nom"),
-						rs.getString("prenom"),
-						rs.getString("email"), 
-						rs.getString("telephone"),
-						rs.getString("rue"),
-						rs.getString("code_postal"),
-						rs.getString("ville"),rs.getString("mot_de_passe"), 0, false);
-				articles.add(
-						
 
-						new ArticleVendu(
-								rs.getInt("no_article"),
-								rs.getString("nom_article"),
-								rs.getString("description"),
-								rs.getDate("date_debut_encheres").toLocalDate(), 
-								rs.getDate("date_fin_encheres").toLocalDate(), 
-								rs.getInt("prix_initial"),
-								rs.getInt("prix_vente"), vendeur, categorie,
-								rs.getString("etat_vente")));	
-				
+				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"), rs.getString("pseudo"),
+						rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getString("telephone"),
+						rs.getString("rue"), rs.getString("code_postal"), rs.getString("ville"),
+						rs.getString("mot_de_passe"), 0, false);
+				articles.add(
+
+						new ArticleVendu(rs.getInt("no_article"), rs.getString("nom_article"),
+								rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
+								rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
+								rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente")));
+
 			}
 			return articles;
-		} 
+		}
 
-		 catch (SQLException e) {
+		catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 
 	}
+
 	@Override
 	public List<ArticleVendu> findByCat(int categoryId) {
-	    try (Connection connection = ConnectionProvider.getConnection();
-	            PreparedStatement pstmt = connection.prepareStatement(FIND_BY_CAT)) {
-	        pstmt.setInt(1, categoryId);  
 
-	        List<ArticleVendu> articles = new ArrayList<>();
-	        ResultSet rs = pstmt.executeQuery();
+		try (Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_CAT)) {
+			pstmt.setInt(1, categoryId);
 
-	        while (rs.next()) {
-	            Categorie categorie = new Categorie(rs.getInt("no_categorie"),rs.getString("libelle"));
+			List<ArticleVendu> articles = new ArrayList<>();
+			ResultSet rs = pstmt.executeQuery();
 
-	            Utilisateur vendeur = new Utilisateur(
-	                    rs.getInt("no_utilisateur"),
-	                    rs.getString("pseudo"),
-	                    rs.getString("nom"),
-	                    rs.getString("prenom"),
-	                    rs.getString("email"),
-	                    rs.getString("telephone"),
-	                    rs.getString("rue"),
-	                    rs.getString("code_postal"),
-	                    rs.getString("ville"),
-	                    rs.getString("mot_de_passe"), 0, false);
+			while (rs.next()) {
+				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
 
-	            articles.add(new ArticleVendu(
-	            		rs.getInt("no_article"),
-	                    rs.getString("nom_article"),
-	                    rs.getString("description"),
-	                    rs.getDate("date_debut_encheres").toLocalDate(),
-	                    rs.getDate("date_fin_encheres").toLocalDate(),
-	                    rs.getInt("prix_initial"),
-	                    rs.getInt("prix_vente"), vendeur, categorie,
-	                    rs.getString("etat_vente")));
-	        }
-	        return articles;
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return null;
+				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"), rs.getString("pseudo"),
+						rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getString("telephone"),
+						rs.getString("rue"), rs.getString("code_postal"), rs.getString("ville"),
+						rs.getString("mot_de_passe"), 0, false);
+
+				articles.add(new ArticleVendu(rs.getInt("no_article"), rs.getString("nom_article"),
+						rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
+						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
+						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente")));
+			}
+			return articles;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void modifyEtat(String etatVente, int noArticle) {
+		try (Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(UPDATE)) {
+
+			pstmt.setString(1, etatVente);
+			pstmt.setInt(2, noArticle);
+
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public List<ArticleVendu> findByEtatVente(String etatVente) {
+		try (Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_ETAT);) {
+
+			pstmt.setString(1, etatVente);
+			ResultSet rs = pstmt.executeQuery();
+
+			List<ArticleVendu> articles = new ArrayList<ArticleVendu>();
+
+			if (rs.next()) {
+				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
+
+				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"), rs.getString("pseudo"),
+						rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getString("telephone"),
+						rs.getString("rue"), rs.getString("code_postal"), rs.getString("ville"),
+						rs.getString("mot_de_passe"), 0, false);
+
+				ArticleVendu article = new ArticleVendu(rs.getInt("no_article"), rs.getString("nom_article"),
+						rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
+						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
+						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente"));
+
+				articles.add(article);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }
