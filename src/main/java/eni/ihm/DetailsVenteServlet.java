@@ -35,11 +35,7 @@ public class DetailsVenteServlet extends HttpServlet {
 			// transmettre l'objet vers la jsp
 			request.setAttribute("enchere", enchere);
 			request.setAttribute("article", article);
-			System.out.println(enchere);
-
-				session.setAttribute("ancienneEnchere", enchere.getMontantEnchere());
-			
-			
+		
 			// forward
 			request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
 		
@@ -47,7 +43,7 @@ public class DetailsVenteServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-HttpSession session = request.getSession();
+		HttpSession session = request.getSession();
 		
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 		int id = (int) session.getAttribute("id-article");
@@ -57,13 +53,11 @@ HttpSession session = request.getSession();
 		LocalDate dateEnchere = LocalDate.now();
 		int montantEnchere = Integer.parseInt(request.getParameter("montantEnchere"));
 		
-	
 		Enchere enchere = new Enchere(utilisateur, article, dateEnchere, montantEnchere);
 		
 		request.setAttribute("article", article);
 		int numeroArticle = Integer.parseInt(request.getParameter("id"));
-		
-		
+			
 		try {
 			
 			EnchereManager.getInstance().ajouterUneEnchere(enchere);
@@ -72,16 +66,12 @@ HttpSession session = request.getSession();
 //			enchere.setMontantEnchere(ancienneEnchere);
 			request.setAttribute("enchere", enchere);
 			request.setAttribute("error", e.getMessage());
-			response.sendRedirect(request.getContextPath()+"/vente/details?id="+numeroArticle);
-			//request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
+			
+			doGet(request, response);
 			e.printStackTrace();
 			return;
 		}
 		request.setAttribute("enchere", enchere);
 		request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
-		
-		
-	
 	}
-
 }
