@@ -132,7 +132,6 @@
 							Enchérir
 						</button>
 					</form>
->>>>>>> 562930e4ba9e02df71af23d706adc49744f96467
 			</div>
 		</div>
 	</div>
