@@ -28,7 +28,7 @@ public class DetailsVenteServlet extends HttpServlet {
 			session.setAttribute("id-article", id);
 			 ArticleVendu article = ArticleVenduManager.getInstance().recupUnArticle(id);
 			 Enchere enchere = EnchereManager.getInstance().trouverUneEnchere(id);
-			 
+			 System.out.println(id);
 			// transmettre l'objet vers la jsp
 			request.setAttribute("enchere", enchere);
 			request.setAttribute("article", article);
