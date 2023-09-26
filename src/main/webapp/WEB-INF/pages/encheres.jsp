@@ -45,6 +45,7 @@
 		</div>
 		<div class="row mt-5 mb-5">
 		<c:if test="${ utilisateur != null }">
+			<form action="" method="GET">
   		<div class="col-6">
   			<div class="container-fluid">
   				<div class="row">
@@ -107,11 +108,14 @@
   				</div>
   			</div>
   		</div>
+  		<button type="submit" class="btn btn-primary mt-2">Filtrer</button>
+  		</form>
   		</c:if>
   	</div>
 		
 	</div>
 	<div class="col-10 offset-1 flex-wrap d-flex justify-content-around ">
+	
 		<c:forEach var="article" items="${ articles }">
 			<div class="card col-3 m-3 border-success  ">
 				<div class="card-header">
