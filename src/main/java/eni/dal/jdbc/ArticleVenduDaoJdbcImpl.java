@@ -38,8 +38,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 	private static final String UPDATE_ETAT_VENTE = "UPDATE ARTICLES_VENDUS SET etat_vente=? WHERE no_article = ?";
 	private static final String FIND_BY_ETAT = "SELECT * FROM ARTICLES_VENDUS  INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente=?";
 	private static final String FIND_BY_USER = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE ARTICLES_VENDUS.no_utilisateur=?";
-	private static final String FIND_BY_EC= "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE ARTICLES_VENDUS.etat_vente='EC'";
-	@Override
+	
 	public void save(ArticleVendu article) {
 
 		try (Connection connection = ConnectionProvider.getConnection();
@@ -237,12 +236,14 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_ETAT);) {
 
+			
+			System.out.println(etatVente);
 			pstmt.setString(1, etatVente);
 			ResultSet rs = pstmt.executeQuery();
 
 			List<ArticleVendu> articles = new ArrayList<ArticleVendu>();
 
-			if (rs.next()) {
+			while (rs.next()) {
 				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
 
 				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"), rs.getString("pseudo"),
@@ -255,8 +256,10 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
 						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente"));
 
+				
 				articles.add(article);
 			}
+			return articles;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

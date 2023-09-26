@@ -58,19 +58,19 @@
 						</div>
 						<div class="container ck-achats">
 							<div class="form-check">
-							  <input class="form-check-input" name="ec" type="checkbox" value="" id="eo">
+							  <input class="form-check-input" name="etat" type="checkbox" value="eo" id="eo">
 							  <label class="form-check-label" for="eo">
 							    Enchères ouvertes
 							  </label>
 							</div>
 							<div class="form-check">
-							  <input class="form-check-input" type="checkbox" value="" id="meec">
+							  <input class="form-check-input" type="checkbox" name="etat" value="EC" id="meec">
 							  <label class="form-check-label" for="meec">
 							    Mes enchères en cours
 							  </label>
 							</div>
 							<div class="form-check">
-							  <input class="form-check-input" type="checkbox" value="" id="mer">
+							  <input class="form-check-input" type="checkbox" name="etat" value="ET" id="mer">
 							  <label class="form-check-label" for="mer">
 							    Mes enchères remportées
 							  </label>

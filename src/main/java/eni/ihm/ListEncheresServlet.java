@@ -2,6 +2,7 @@ package eni.ihm;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import eni.bll.ArticleVenduManager;
@@ -28,10 +29,13 @@ public class ListEncheresServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
 
-		List<ArticleVendu> articles = null;
+		List<ArticleVendu> articles = new ArrayList<ArticleVendu>();
 		String selectedCategory = request.getParameter("categories");
 		String mvec = request.getParameter("mvec");
-		String ec = request.getParameter("ec");
+		String etat = request.getParameter("etat");
+		String ventes = request.getParameter("mes ventes");
+		
+	
 
 		if (request.getParameter("q") != null) {
 			articles = ArticleVenduManager.getInstance().rechercheUnArticle(request.getParameter("q"));
@@ -44,15 +48,19 @@ public class ListEncheresServlet extends HttpServlet {
 			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 			int noUtilisateur = utilisateur.getNoUtilisateur();
 			articles = ArticleVenduManager.getInstance().findbyUser(noUtilisateur);
-		} else if (ec != null) {
-			articles= ArticleVenduManager.getInstance().rechercheUnArticleParEtat(ec);
-			System.out.println(articles);
+		} else if (etat != null) {
+			articles= ArticleVenduManager.getInstance().rechercheUnArticleParEtat(etat);
+		
+		}else if (ventes != null) {
+			articles= ArticleVenduManager.getInstance().rechercheUnArticleParEtat(ventes);
+
 		}
 
 		else {
 			articles = ArticleVenduManager.getInstance().recupTousLesArticles();
 			
 		}
+		
 
 		request.setAttribute("categories", categories);
 		request.setAttribute("articles", articles);
