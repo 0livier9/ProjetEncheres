@@ -69,7 +69,7 @@ public class AddArticleServlet extends HttpServlet {
 			
 			String nom = request.getParameter("nom_article");
 			String description = request.getParameter("description");
-			LocalDate dateDebutEnchere = LocalDate.parse(request.getParameter("date_fin_encheres"));
+			LocalDate dateDebutEnchere = LocalDate.parse(request.getParameter("date_debut_encheres"));
 			LocalDate dateFinEnchere = LocalDate.parse(request.getParameter("date_fin_encheres"));
 			int prixInitial = Integer.parseInt(request.getParameter("prix_initial"));
 			String etatVente = request.getParameter("etat_vente");
