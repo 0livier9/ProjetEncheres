@@ -29,7 +29,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 			+ "(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, etat_vente) "
 			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String DELETE_ONE = "DELETE ENCHERES WHERE id = ?";
-	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET no_utilisateur=?,no_article=?,date_enchere=?,montant_enchere=? WHERE id = ?";
+	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET nom_article=?,description=?,date_debut_encheres=?,date_fin_encheres=?,prix_initial=?,no_categorie=? WHERE no_article = ?";
 	private static final String FIND_BY_NAME = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie "
 			+ "INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE nom_article LIKE ? ";
 
@@ -40,6 +40,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 	private static final String FIND_BY_ETATACHAT = "SELECT * FROM ARTICLES_VENDUS INNER JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente=? AND ENCHERES.no_utilisateur=?";
 	private static final String FIND_BY_ETATVENDEUR = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente=? AND ARTICLES_VENDUS.no_utilisateur=?";
 	private static final String FIND_BY_USER = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE ARTICLES_VENDUS.no_utilisateur=?";
+	
 	
 	public void save(ArticleVendu article) {
 
@@ -124,19 +125,18 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(UPDATE)) {
 
-			// Update Set
-//			pstmt.setString(1, game.getName());
-//			pstmt.setString(2, game.getCompany());
-//			pstmt.setString(3, game.getCategory());
-//			pstmt.setFloat(4, game.getPrice());
-//			pstmt.setDate(5, Date.valueOf(game.getReleaseDate()));
-//			pstmt.setInt(6, game.getAge());
-//			pstmt.setString(7, game.getFormat());
-//			pstmt.setString(8, game.getVersion());
-//			// Where id
-//			pstmt.setInt(9, game.getId());
-//			// execute
-//			pstmt.executeUpdate();
+			
+			pstmt.setString(1, article.getNomArticle());
+			pstmt.setString(2, article.getDescription());
+			pstmt.setDate(3, Date.valueOf(article.getDateDebutEncheres()));
+			pstmt.setDate(4, Date.valueOf(article.getDateFinEncheres()));
+			pstmt.setInt(5, article.getPrixInitial());
+			pstmt.setInt(6, article.getCategorie().getNoCategorie());
+			
+			// Where id
+			pstmt.setInt(7, article.getNoArticle());
+			// execute
+			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

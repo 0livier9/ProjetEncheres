@@ -41,6 +41,10 @@
 					  <label for="ville" class="form-label">Ville</label>
 					  <input type="text" class="form-control" readonly="readonly" value="${ utilisateur.ville }" name="ville" id="ville" placeholder="ex. toto">
 					</div>
+					<div class="mb-3">
+					  <label for="credit" class="form-label">Crédit</label>
+					  <input type="text" class="form-control" readonly="readonly" value="${ utilisateur.credit }" name="credit" id="credit" placeholder="ex. toto">
+					</div>
 					<button class="btn btn-primary offset-5 mb-5 mt-2" role="button" type="submit" >Modifier</button>					
 				</form>
 			</div>

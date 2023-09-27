@@ -152,6 +152,7 @@ text-decoration: none;
 
 	</div>
 </main>
+
 <script src="${ pageContext.request.contextPath }/assets/js/main.js"></script>
 
 <%@ include file="/WEB-INF/fragments/footer.jspf"%>
