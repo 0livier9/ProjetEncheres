@@ -7,11 +7,8 @@ import java.util.List;
 
 import eni.bll.ArticleVenduManager;
 import eni.bll.CategorieManager;
-import eni.bll.EnchereManager;
-import eni.bll.UtilisateurManager;
 import eni.bo.ArticleVendu;
 import eni.bo.Categorie;
-import eni.bo.Enchere;
 import eni.bo.Utilisateur;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,56 +19,50 @@ import jakarta.servlet.http.HttpSession;
 
 @WebServlet("")
 public class ListEncheresServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
+        List<ArticleVendu> articles = new ArrayList<>();
+        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+        int noUtilisateur = (utilisateur != null) ? utilisateur.getNoUtilisateur() : -1;
 
-		List<ArticleVendu> articles = new ArrayList<ArticleVendu>();
-		String selectedCategory = request.getParameter("categories");
-		String mvec = request.getParameter("mvec");
-		String etat = request.getParameter("etat");
-		String ventes = request.getParameter("mes ventes");
-		
-	
+        String selectedCategory = request.getParameter("categories");
+        String mvec = request.getParameter("mvec");
+        String etat = request.getParameter("etat");
+        String ventes = request.getParameter("ventes");
+        String q = request.getParameter("q");
+        String mvt = request.getParameter("mvt");
+        String vnd = request.getParameter("vnd");
+        String eo = request.getParameter("eo");
 
-		if (request.getParameter("q") != null) {
-			articles = ArticleVenduManager.getInstance().rechercheUnArticle(request.getParameter("q"));
+        if (q != null) {
+            articles = ArticleVenduManager.getInstance().rechercheUnArticle(q);
+        } else if (selectedCategory != null && !selectedCategory.isEmpty()
+                && !selectedCategory.equals("Selectionner une categorie")) {
+            int categoryId = Integer.parseInt(selectedCategory);
+            articles = ArticleVenduManager.getInstance().rechercheUnArticleParCate(categoryId);
+        } else if (mvec != null) {
+            articles = ArticleVenduManager.getInstance().findbyUser(noUtilisateur);
+        } else if (eo != null) {
+            articles = ArticleVenduManager.getInstance().findbyetat();
+            System.out.println(eo + 1);
+        } else if (etat != null) {
+            articles = ArticleVenduManager.getInstance().rechercheUnArticleParEtat(etat, noUtilisateur);
+            System.out.println(etat);
+        } else if (ventes != null) {
+            articles = ArticleVenduManager.getInstance().rechercheUnArticleParEtat(ventes, noUtilisateur);
+        } else if (mvt != null || vnd != null) {
+            articles = ArticleVenduManager.getInstance().findbyVendeur((mvt != null) ? mvt : vnd, noUtilisateur);
+        } else {
+            articles = ArticleVenduManager.getInstance().recupTousLesArticles();
+        }
 
-		} else if (selectedCategory != null && !selectedCategory.isEmpty()&& !selectedCategory.equals("Selectionner une categorie")) {
-
-			int categoryId = Integer.parseInt(selectedCategory);
-			articles = ArticleVenduManager.getInstance().rechercheUnArticleParCate(categoryId);
-
-		} else if (mvec != null) {
-			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
-			int noUtilisateur = utilisateur.getNoUtilisateur();
-			articles = ArticleVenduManager.getInstance().findbyUser(noUtilisateur);
-		} else if (etat != null) {
-			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
-			int noUtilisateur = utilisateur.getNoUtilisateur();
-			articles= ArticleVenduManager.getInstance().rechercheUnArticleParEtat(etat, noUtilisateur);
-		
-		}else if (ventes != null) {
-			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
-			int noUtilisateur = utilisateur.getNoUtilisateur();
-			articles= ArticleVenduManager.getInstance().rechercheUnArticleParEtat(ventes,noUtilisateur);
-
-		}
-
-		else {
-			articles = ArticleVenduManager.getInstance().recupTousLesArticles();
-			
-		}
-		
-
-		request.setAttribute("categories", categories);
-		request.setAttribute("articles", articles);
-
-		request.setAttribute("annee", LocalDate.now().getYear());
-		request.getRequestDispatcher("/WEB-INF/pages/encheres.jsp").forward(request, response);
-
-	}
+        request.setAttribute("categories", categories);
+        request.setAttribute("articles", articles);
+        request.setAttribute("annee", LocalDate.now().getYear());
+        request.getRequestDispatcher("/WEB-INF/pages/encheres.jsp").forward(request, response);
+    }
 }

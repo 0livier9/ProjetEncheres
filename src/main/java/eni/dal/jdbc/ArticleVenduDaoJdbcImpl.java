@@ -36,7 +36,9 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 	private static final String FIND_BY_CAT = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie"
 			+ " INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE CATEGORIES.no_categorie = ?";
 	private static final String UPDATE_ETAT_VENTE = "UPDATE ARTICLES_VENDUS SET etat_vente=? WHERE no_article = ?";
-	private static final String FIND_BY_ETAT = "SELECT * FROM ARTICLES_VENDUS INNER JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente=? AND ENCHERES.no_utilisateur=?";
+	private static final String FIND_BY_ETAT = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente='EC'";
+	private static final String FIND_BY_ETATACHAT = "SELECT * FROM ARTICLES_VENDUS INNER JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente=? AND ENCHERES.no_utilisateur=?";
+	private static final String FIND_BY_ETATVENDEUR = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente=? AND ARTICLES_VENDUS.no_utilisateur=?";
 	private static final String FIND_BY_USER = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE ARTICLES_VENDUS.no_utilisateur=?";
 	
 	public void save(ArticleVendu article) {
@@ -234,7 +236,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 
 	public List<ArticleVendu> findByEtatVente(String etatVente, int noAcheteur) {
 		try (Connection connection = ConnectionProvider.getConnection();
-				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_ETAT);) {
+				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_ETATACHAT);) {
 
 			
 			pstmt.setString(1, etatVente);
@@ -294,4 +296,75 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		}
 		return null;
 	}
+
+	public  List<ArticleVendu> findByVendeur(String etatVente, int noVendeur) {
+		
+		try (Connection connection = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_ETATVENDEUR);) {
+
+			
+			pstmt.setString(1, etatVente);
+			pstmt.setInt(2, noVendeur);
+			ResultSet rs = pstmt.executeQuery();
+
+			List<ArticleVendu> articles = new ArrayList<>();
+
+			while (rs.next()) {
+				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
+
+				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"), rs.getString("pseudo"),
+						rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getString("telephone"),
+						rs.getString("rue"), rs.getString("code_postal"), rs.getString("ville"),
+						rs.getString("mot_de_passe"), 0, false);
+
+				ArticleVendu article = new ArticleVendu(rs.getInt("no_article"), rs.getString("nom_article"),
+						rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
+						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
+						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente"));
+
+				
+				articles.add(article);
+			}
+			return articles;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public List<ArticleVendu> findbyetat() {
+		try (Connection connection = ConnectionProvider.getConnection();
+			Statement pstmt = connection.createStatement();) {
+
+			
+	
+		
+			ResultSet rs = pstmt.executeQuery(FIND_BY_ETAT);
+
+			List<ArticleVendu> articles = new ArrayList<>();
+
+			while (rs.next()) {
+				Categorie categorie = new Categorie(rs.getInt("no_categorie"), rs.getString("libelle"));
+
+				Utilisateur vendeur = new Utilisateur(rs.getInt("no_utilisateur"), rs.getString("pseudo"),
+						rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getString("telephone"),
+						rs.getString("rue"), rs.getString("code_postal"), rs.getString("ville"),
+						rs.getString("mot_de_passe"), 0, false);
+
+				ArticleVendu article = new ArticleVendu(rs.getInt("no_article"), rs.getString("nom_article"),
+						rs.getString("description"), rs.getDate("date_debut_encheres").toLocalDate(),
+						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
+						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente"));
+
+				
+				articles.add(article);
+			}
+			return articles;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }

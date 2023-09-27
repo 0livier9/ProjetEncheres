@@ -4,10 +4,10 @@
 <main class="row">
 	<div class="col">
 		<div class="row text-center mt-4">
-			<h1> Inscription </h1>
+			<h1> Profil de ${ vendeur.pseudo }  </h1>
 		</div>		
 		<div class="row mt-5">
-			<div class="col-8 offset-2">
+			<div class="col-4 offset-4">
 					<div class="mb-3">
 					  <label for="pseudo" class="form-label">Pseudo</label>
 					  <input type="text" class="form-control" readonly="readonly" value="${ vendeur.pseudo }" name="pseudo" id="pseudo" placeholder="ex. toto">

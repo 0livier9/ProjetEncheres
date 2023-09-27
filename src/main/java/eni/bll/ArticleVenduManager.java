@@ -1,5 +1,6 @@
 package eni.bll;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eni.bo.ArticleVendu;
@@ -53,4 +54,12 @@ public class ArticleVenduManager {
 	public List<ArticleVendu> findbyUser ( int noUtilisateur){
 		return ArticleVenduDao.findbyUser(noUtilisateur);
 	}
+	public List<ArticleVendu> findbyVendeur (String etatVente,int noVendeur ){
+		return ArticleVenduDao.findByVendeur(etatVente, noVendeur);
+	}
+	public List<ArticleVendu> findbyetat(){
+		return ArticleVenduDao.findbyetat();
+	}
+	
+	
 }
