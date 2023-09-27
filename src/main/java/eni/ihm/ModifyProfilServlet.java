@@ -69,7 +69,7 @@ public class ModifyProfilServlet extends HttpServlet {
 				String motDePasse = request.getParameter("motDePasse");
 				
 				UtilisateurManager.getInstance().supprimerUnUtilisateur(pseudo, motDePasse);
-				
+			
 				HttpSession session = request.getSession();
 				session.invalidate();
 				response.sendRedirect( request.getContextPath() +"");

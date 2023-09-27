@@ -84,6 +84,7 @@ public class DetailsVenteServlet extends HttpServlet {
 				e.printStackTrace();
 				return;
 			}
+			request.setAttribute("utilisateur", utilisateur);
 			request.setAttribute("enchere", enchere);
 			request.getRequestDispatcher("/WEB-INF/pages/details-vente.jsp").forward(request, response);
 		}

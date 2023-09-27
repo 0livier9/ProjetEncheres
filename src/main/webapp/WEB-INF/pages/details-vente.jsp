@@ -7,10 +7,25 @@
 	<div class="col">
 		<div class="col-4 offset-4">
 			<div class="row text-center mt-4">
-				<h1>details de la vente</h1>
-
+		
+			<c:choose>
+			<c:when test="${article.getEtatVente().contains('ET') && article.getVendeur().getNoUtilisateur() != enchere.getUser().getNoUtilisateur()}">
+				<h1>Vous avez remporté l'enchere </h1>
+			</c:when>
+	<%-- 		<c:when test="${article.getEtatVente().contains('ET')}">
+				<h1>HEllo</h1>
+			</c:when> --%>
+			
+			<c:otherwise>
+			<h1>Détails de la vente</h1>
+		
+			</c:otherwise>			
+			</c:choose>
+			
+			
 			</div>
 			<div class="row mt-5 ">
+		
 				<div class=" mb-4">
 					<c:if test="${ ! empty error }">
 						<div class="alert alert-danger">${ error }</div>
@@ -45,7 +60,7 @@
 						<label for="montant_enchere" class="form-label">Meilleur
 							offre</label> <label for="montant_enchere" class="form-label">
 							par ${enchere.getUser().getPseudo()} :</label> <input type="number"
-							value="${enchere.getMontantEnchere()}" + readonly="readonly"
+							value="${enchere.getMontantEnchere()}"  readonly="readonly"
 							class="form-control" name="montant_enchere" id="montant_enchere">
 					</div>
 					<div class="mb-3">
