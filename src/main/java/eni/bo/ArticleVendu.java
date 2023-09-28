@@ -15,12 +15,9 @@ public class ArticleVendu {
 	Categorie categorie;
 	private String etatVente;
 
-
-
 	public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres,
 			LocalDate dateFinEncheres, int prixInitial, int prixVente, Utilisateur vendeur, Categorie categorie,
 			String etatVente) {
-		super();
 		this.noArticle = noArticle;
 		this.nomArticle = nomArticle;
 		this.description = description;
@@ -35,8 +32,6 @@ public class ArticleVendu {
 
 	public ArticleVendu(String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
 			int prixInitial, int prixVente, Utilisateur vendeur, Categorie categorie, String etatVente) {
-		super();
-
 		this.nomArticle = nomArticle;
 		this.description = description;
 		this.dateDebutEncheres = dateDebutEncheres;
@@ -122,6 +117,7 @@ public class ArticleVendu {
 	public void setVendeur(Utilisateur vendeur) {
 		this.vendeur = vendeur;
 	}
+
 	public Categorie getCategorie() {
 		return categorie;
 	}
@@ -129,6 +125,7 @@ public class ArticleVendu {
 	public void setCategorie(Categorie categorie) {
 		this.categorie = categorie;
 	}
+
 	@Override
 	public String toString() {
 		return "ArticleVendu [noArticle=" + noArticle + ", nomArticle=" + nomArticle + ", description=" + description

@@ -20,13 +20,11 @@ import eni.dal.EnchereDao;
 
 public class CategorieDaoJdbcImpl implements CategorieDao {
 
-	// Requetes SQL
 	private static final String SELECT_ALL = "SELECT * FROM CATEGORIES";
 	private static final String SELECT_ONE = "SELECT * FROM CATEGORIES WHERE no_categorie = ?";
 	private static final String SAVE = "INSERT INTO CATEGORIES( libelle ) VALUES (? )";
 	private static final String DELETE_ONE = "DELETE ENCHERES WHERE no_categorie = ?";
 	private static final String UPDATE = "UPDATE CATEGORIES SET libelle=? WHERE no_categorie = ?";
-	private static final String FIND_BY_NAME = "SELECT * FROM ENCHERES WHERE no_article LIKE ? ";
 
 	@Override
 	public void save(Categorie categorie) {
@@ -46,11 +44,11 @@ public class CategorieDaoJdbcImpl implements CategorieDao {
 	public Categorie findOne(int no_categorie) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SELECT_ONE);) {
-			pstmt.setInt(1, no_categorie);			
-			ResultSet rs =  pstmt.executeQuery();
-			if(rs.next()) {
-					return new Categorie(rs.getInt(no_categorie),rs.getString("libelle"));		
-			}			
+			pstmt.setInt(1, no_categorie);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return new Categorie(rs.getInt(no_categorie), rs.getString("libelle"));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -82,12 +80,10 @@ public class CategorieDaoJdbcImpl implements CategorieDao {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(UPDATE)) {
 
-			// Update Set
 			pstmt.setString(1, categorie.getLibelle());
-//		
-//			// Where id
+
 			pstmt.setInt(2, categorie.getNoCategorie());
-//			// execute
+
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -104,35 +100,5 @@ public class CategorieDaoJdbcImpl implements CategorieDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-	}
-
-	@Override
-	public List<Categorie> findByName(String query) {
-		try (Connection connection = ConnectionProvider.getConnection();
-				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_NAME)) {
-////			pstmt.setString(1, "%" + query + "%");
-////			List<ArticleVendu> games = new ArrayList<GaArticleVendume>();
-////			ResultSet rs = pstmt.executeQuery();
-////			while (rs.next()) {
-////				games.add(
-////
-////						new ArticleVendu(rs.getInt("id"), rs.getString("name"), rs.getString("company"),
-////								rs.getString("category"), rs.getFloat("price"), rs.getDate("releaseDate").toLocalDate(),
-////								rs.getInt("age"), rs.getString("format"), rs.getString("version"))
-//
-//				);
-//			}
-//			return games;
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-
 	}
 }

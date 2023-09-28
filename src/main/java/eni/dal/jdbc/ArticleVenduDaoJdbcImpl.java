@@ -22,7 +22,6 @@ import eni.dal.EnchereDao;
 
 public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 
-	// Requetes SQL
 	private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur";
 	private static final String SELECT_ONE = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE no_article = ?";
 	private static final String SAVE = "INSERT INTO ARTICLES_VENDUS "
@@ -40,13 +39,12 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 	private static final String FIND_BY_ETATACHAT = "SELECT * FROM ARTICLES_VENDUS INNER JOIN ENCHERES ON ARTICLES_VENDUS.no_article = ENCHERES.no_article INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente=? AND ENCHERES.no_utilisateur=?";
 	private static final String FIND_BY_ETATVENDEUR = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE etat_vente=? AND ARTICLES_VENDUS.no_utilisateur=?";
 	private static final String FIND_BY_USER = "SELECT * FROM ARTICLES_VENDUS INNER JOIN CATEGORIES ON ARTICLES_VENDUS.no_categorie = CATEGORIES.no_categorie INNER JOIN UTILISATEURS ON ARTICLES_VENDUS.no_utilisateur = UTILISATEURS.no_utilisateur WHERE ARTICLES_VENDUS.no_utilisateur=?";
-	
-	
+
 	public void save(ArticleVendu article) {
 
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(SAVE);) {
-			// valoriser les params de la requete
+
 			pstmt.setString(1, article.getNomArticle());
 			pstmt.setString(2, article.getDescription());
 			pstmt.setDate(3, Date.valueOf(article.getDateDebutEncheres()));
@@ -57,7 +55,6 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 			pstmt.setInt(8, article.getCategorie().getNoCategorie());
 			pstmt.setString(9, article.getEtatVente());
 
-			// executer la requete
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -125,17 +122,15 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(UPDATE)) {
 
-			
 			pstmt.setString(1, article.getNomArticle());
 			pstmt.setString(2, article.getDescription());
 			pstmt.setDate(3, Date.valueOf(article.getDateDebutEncheres()));
 			pstmt.setDate(4, Date.valueOf(article.getDateFinEncheres()));
 			pstmt.setInt(5, article.getPrixInitial());
 			pstmt.setInt(6, article.getCategorie().getNoCategorie());
-			
-			// Where id
+
 			pstmt.setInt(7, article.getNoArticle());
-			// execute
+
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -183,7 +178,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		}
 
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		return null;
@@ -238,7 +233,6 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_ETATACHAT);) {
 
-			
 			pstmt.setString(1, etatVente);
 			pstmt.setInt(2, noAcheteur);
 			ResultSet rs = pstmt.executeQuery();
@@ -258,7 +252,6 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
 						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente"));
 
-				
 				articles.add(article);
 			}
 			return articles;
@@ -269,7 +262,7 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		return null;
 	}
 
-	public List<ArticleVendu> findbyUser ( int noUtilisateur){
+	public List<ArticleVendu> findbyUser(int noUtilisateur) {
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_USER)) {
 			pstmt.setInt(1, noUtilisateur);
@@ -297,12 +290,11 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		return null;
 	}
 
-	public  List<ArticleVendu> findByVendeur(String etatVente, int noVendeur) {
-		
+	public List<ArticleVendu> findByVendeur(String etatVente, int noVendeur) {
+
 		try (Connection connection = ConnectionProvider.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(FIND_BY_ETATVENDEUR);) {
 
-			
 			pstmt.setString(1, etatVente);
 			pstmt.setInt(2, noVendeur);
 			ResultSet rs = pstmt.executeQuery();
@@ -322,7 +314,6 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
 						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente"));
 
-				
 				articles.add(article);
 			}
 			return articles;
@@ -332,13 +323,11 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		}
 		return null;
 	}
+
 	public List<ArticleVendu> findbyetat() {
 		try (Connection connection = ConnectionProvider.getConnection();
-			Statement pstmt = connection.createStatement();) {
+				Statement pstmt = connection.createStatement();) {
 
-			
-	
-		
 			ResultSet rs = pstmt.executeQuery(FIND_BY_ETAT);
 
 			List<ArticleVendu> articles = new ArrayList<>();
@@ -356,7 +345,6 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 						rs.getDate("date_fin_encheres").toLocalDate(), rs.getInt("prix_initial"),
 						rs.getInt("prix_vente"), vendeur, categorie, rs.getString("etat_vente"));
 
-				
 				articles.add(article);
 			}
 			return articles;
@@ -366,5 +354,5 @@ public class ArticleVenduDaoJdbcImpl implements ArticleVenduDao {
 		}
 		return null;
 	}
-	
+
 }

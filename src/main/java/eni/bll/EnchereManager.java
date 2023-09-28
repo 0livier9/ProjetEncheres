@@ -11,7 +11,7 @@ import eni.dal.UtilisateurDao;
 import jakarta.servlet.http.HttpSession;
 
 public class EnchereManager {
-	// début Singleton
+
 	private static EnchereManager instance;
 
 	private EnchereManager() {
@@ -22,7 +22,6 @@ public class EnchereManager {
 			instance = new EnchereManager();
 		return instance;
 	}
-	// Fin Singleton
 
 	private EnchereDao enchereDao = DaoFactory.getEnchereDao();
 	private UtilisateurDao utilisateurDao = DaoFactory.getUtilisateurDao();
@@ -38,16 +37,17 @@ public class EnchereManager {
 		if (ancienneEnchere == null) {
 			if (enchere.getUser().getCredit() >= enchere.getMontantEnchere()) {
 				enchereDao.save(enchere);
-			}else {
+			} else {
 				throw new BLLException("Vous n'avez pas assez de crédit ");
 			}
-			
+
 		} else {
 			if (ancienneEnchere.getUser().getNoUtilisateur() == enchere.getUser().getNoUtilisateur()) {
 				throw new BLLException("Vous avez déjà la meilleur enchère");
 			}
 
-			if (enchere.getMontantEnchere() > ancienneEnchere.getMontantEnchere() && enchere.getUser().getCredit() >= enchere.getMontantEnchere()) {
+			if (enchere.getMontantEnchere() > ancienneEnchere.getMontantEnchere()
+					&& enchere.getUser().getCredit() >= enchere.getMontantEnchere()) {
 				int nouveauCredit = enchere.getUser().getCredit() - enchere.getMontantEnchere();
 				utilisateurDao.modifyCredit(nouveauCredit, enchere.getUser().getNoUtilisateur());
 				int majCredit = ancienneEnchere.getUser().getCredit() + ancienneEnchere.getMontantEnchere();

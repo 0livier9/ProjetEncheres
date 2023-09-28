@@ -15,20 +15,21 @@ import eni.bo.Utilisateur;
 @WebServlet("/profil-vendeur")
 public class ViewVendeurServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-      
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id") );
-		
-		 Utilisateur vendeur = UtilisateurManager.getInstance().recupererUtilisateurById(id);
-		 
-		 request.setAttribute("vendeur", vendeur);
-		
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		int id = Integer.parseInt(request.getParameter("id"));
+
+		Utilisateur vendeur = UtilisateurManager.getInstance().recupererUtilisateurById(id);
+
+		request.setAttribute("vendeur", vendeur);
+
 		request.getRequestDispatcher("/WEB-INF/pages/profil-des-autres.jsp").forward(request, response);
 	}
 
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 	}
 
 }

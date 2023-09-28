@@ -23,7 +23,6 @@ public class Enchere {
 		this.dateEnchere = dateEnchere;
 		this.montantEnchere = montantEnchere;
 		this.article = article;
-		// TODO Auto-generated constructor stub
 	}
 
 	public Enchere(ArticleVendu article, Utilisateur user) {

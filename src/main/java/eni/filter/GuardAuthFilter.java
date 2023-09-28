@@ -15,27 +15,18 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(
-		dispatcherTypes = {
-				DispatcherType.REQUEST
-		},
-		urlPatterns = {
-				"/encheres/ajouter",
-				"/deconnexion",
-				"/profil",
-				"/vente/details",
-				"/modificationEnchere"
-		}
-		)
+@WebFilter(dispatcherTypes = { DispatcherType.REQUEST }, urlPatterns = { "/encheres/ajouter", "/deconnexion", "/profil",
+		"/vente/details", "/modificationEnchere" })
 public class GuardAuthFilter extends HttpFilter implements Filter {
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 
 		HttpServletRequest rq = (HttpServletRequest) request;
 		HttpSession session = rq.getSession();
-		if(session.getAttribute("utilisateur")==null) {
+		if (session.getAttribute("utilisateur") == null) {
 			HttpServletResponse rs = (HttpServletResponse) response;
-			rs.sendRedirect(rq.getContextPath()+"/connexion");
+			rs.sendRedirect(rq.getContextPath() + "/connexion");
 			return;
 		}
 		chain.doFilter(request, response);

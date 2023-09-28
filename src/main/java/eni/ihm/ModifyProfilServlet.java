@@ -19,64 +19,62 @@ import eni.dal.jdbc.exception.JDBCException;
 @WebServlet("/modification")
 public class ModifyProfilServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-   
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/pages/modifier-mon-profil.jsp").forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		try {
-			
-		
-			
-				String action=request.getParameter("modifierOuSupprimer");
-			
-			
+
+			String action = request.getParameter("modifierOuSupprimer");
+
 			if (action.equals("modifier")) {
-				
-				
+
 				HttpSession session = request.getSession();
 				Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 				int noUtilisateur = utilisateur.getNoUtilisateur();
 				int credit = utilisateur.getCredit();
 				boolean administrateur = utilisateur.isAdministrateur();
-			
-				utilisateur = new Utilisateur(noUtilisateur, request.getParameter("pseudo"), request.getParameter("nom"),
-						request.getParameter("prenom"), request.getParameter("email"), request.getParameter("telephone"),
-						request.getParameter("rue"), request.getParameter("codePostal"), request.getParameter("ville"),
+
+				utilisateur = new Utilisateur(noUtilisateur, request.getParameter("pseudo"),
+						request.getParameter("nom"), request.getParameter("prenom"), request.getParameter("email"),
+						request.getParameter("telephone"), request.getParameter("rue"),
+						request.getParameter("codePostal"), request.getParameter("ville"),
 						request.getParameter("motDePasse"), credit, administrateur);
-				
-				String nouveauMotDePasse="";
-			
+
+				String nouveauMotDePasse = "";
+
 				if (request.getParameter("nouveauMotDePasse").isEmpty()) {
 					nouveauMotDePasse = request.getParameter("motDePasse");
-				}else {	
+				} else {
 					nouveauMotDePasse = request.getParameter("nouveauMotDePasse");
 					if (!nouveauMotDePasse.equals(request.getParameter("ConfirmationMotDePasse"))) {
 						throw new BLLException("Les mots de passe ne sont pas identiques !!");
 					}
 				}
-				
+
 				UtilisateurManager.getInstance().modificationUtilisateur(utilisateur, nouveauMotDePasse);
-				
+
 				session.setAttribute("utilisateur", utilisateur);
-				
-				response.sendRedirect( request.getContextPath() +"/modification");
-				
-			}else {
-				
-				String pseudo = request.getParameter("pseudo");	
+
+				response.sendRedirect(request.getContextPath() + "/modification");
+
+			} else {
+
+				String pseudo = request.getParameter("pseudo");
 				String motDePasse = request.getParameter("motDePasse");
-				
+
 				UtilisateurManager.getInstance().supprimerUnUtilisateur(pseudo, motDePasse);
-			
+
 				HttpSession session = request.getSession();
 				session.invalidate();
-				response.sendRedirect( request.getContextPath() +"");
+				response.sendRedirect(request.getContextPath() + "");
 			}
-			
-			
-		}catch (BLLException e) {
+
+		} catch (BLLException e) {
 
 			request.setAttribute("error", e.getMessage());
 			doGet(request, response);
@@ -85,4 +83,3 @@ public class ModifyProfilServlet extends HttpServlet {
 	}
 
 }
-

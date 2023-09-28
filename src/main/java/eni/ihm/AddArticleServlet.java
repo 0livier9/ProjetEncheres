@@ -24,14 +24,13 @@ import eni.bo.Utilisateur;
 public class AddArticleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	// afficher la page d'ajout
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 
-		int noUtilisateur = utilisateur.getNoUtilisateur(); // On récupérer le numéro de l'utilisateur
+		int noUtilisateur = utilisateur.getNoUtilisateur();
 
 		String rue = utilisateur.getRue();
 		String codePostal = utilisateur.getCodePostal();
@@ -39,15 +38,12 @@ public class AddArticleServlet extends HttpServlet {
 
 		List<Categorie> categories = CategorieManager.getInstance().recupTousLesCategories();
 
-
-		// On met les catégories dans la requête
 		request.setAttribute("categories", categories);
 
 		request.setAttribute("rue", rue);
 		request.setAttribute("code_postal", codePostal);
 		request.setAttribute("ville", ville);
 
-		// On met le numéro de l'utilisateur dans la requête
 		request.setAttribute("no_utilisateur", noUtilisateur);
 
 		request.getRequestDispatcher("/WEB-INF/pages/article-add.jsp").forward(request, response);
@@ -56,31 +52,26 @@ public class AddArticleServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			// get data from param
+
 			HttpSession session = request.getSession();
 			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
-			
 
-			int noCat = Integer.parseInt(request.getParameter("categories")) ;
+			int noCat = Integer.parseInt(request.getParameter("categories"));
 			String libelleCategorie = request.getParameter("libelle");
-			
-			 Categorie categorie = new Categorie( noCat,libelleCategorie);
 
-			
+			Categorie categorie = new Categorie(noCat, libelleCategorie);
+
 			String nom = request.getParameter("nom_article");
 			String description = request.getParameter("description");
 			LocalDate dateDebutEnchere = LocalDate.parse(request.getParameter("date_debut_encheres"));
 			LocalDate dateFinEnchere = LocalDate.parse(request.getParameter("date_fin_encheres"));
 			int prixInitial = Integer.parseInt(request.getParameter("prix_initial"));
 			String etatVente = request.getParameter("etat_vente");
-			// create Article instance
+
 			ArticleVendu article = new ArticleVendu(nom, description, dateDebutEnchere, dateFinEnchere, prixInitial, 0,
 					utilisateur, categorie, etatVente);
-			// Add
-			
-			
+
 			ArticleVenduManager.getInstance().ajouterUneVente(article);
-			// redirect
 
 			response.sendRedirect(request.getContextPath() + "");
 		} catch (Exception e) {

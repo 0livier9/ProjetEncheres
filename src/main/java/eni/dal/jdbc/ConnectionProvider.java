@@ -15,7 +15,6 @@ public class ConnectionProvider {
 	static {
 		try {
 			Context context = new InitialContext();
-			// JNDI
 			datasource = (DataSource) context.lookup("java:comp/env/jdbc/pool_cnx");
 		} catch (NamingException e) {			
 			e.printStackTrace();
