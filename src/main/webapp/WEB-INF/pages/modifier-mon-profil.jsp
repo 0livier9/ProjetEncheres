@@ -4,7 +4,7 @@
 <main class="row">
 	<div class="col">
 		<div class="row text-center mt-4">
-			<h1> Inscription </h1>
+			<h1> Modifier mon profil </h1>
 		</div>		
 		<div class="row mt-5">
 			<div class="col-4 offset-4">
@@ -13,7 +13,7 @@
 						${ error }
 					</div>
 				</c:if>
-				<form method="POST" action="" onsubmit="return confirm('Confirmer mosdification ou suppression ?')" >
+				<form method="POST" action="" onsubmit="return confirm('Confirmer modification ou suppression ?')" >
 					<div class="mb-3">
 					  <label for="pseudo" class="form-label">Pseudo</label>
 					  <input type="text" class="form-control" value="${ utilisateur.pseudo }" name="pseudo" id="pseudo" placeholder="ex. toto">
