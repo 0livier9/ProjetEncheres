@@ -7,25 +7,27 @@
 	<div class="col">
 		<div class="col-4 offset-4">
 			<div class="row text-center mt-4">
-		
-			<c:choose>
-			<c:when test="${article.getEtatVente().contains('ET') && article.getVendeur().getNoUtilisateur() != enchere.getUser().getNoUtilisateur()}">
-				<h1>Vous avez remporté l'enchere </h1>
-			</c:when>
-	<%-- 		<c:when test="${article.getEtatVente().contains('ET')}">
-				<h1>HEllo</h1>
-			</c:when> --%>
-			
-			<c:otherwise>
-			<h1>Détails de la vente</h1>
-		
-			</c:otherwise>			
-			</c:choose>
-			
-			
+
+				<c:choose>
+					<c:when
+						test="${article.getEtatVente().contains('ET') && utilisateur.getNoUtilisateur() == enchere.getUser().getNoUtilisateur()}">
+						<h1>Vous avez remporté l'enchere</h1>
+					</c:when>
+					<c:when
+						test="${article.getEtatVente().contains('ET') && utilisateur.getNoUtilisateur() != enchere.getUser().getNoUtilisateur()}">
+						<h1>${enchere.getUser().getPseudo()}aremporté l'enchère</h1>
+					</c:when>
+
+					<c:otherwise>
+						<h1>Détails de la vente</h1>
+
+					</c:otherwise>
+				</c:choose>
+
+
 			</div>
 			<div class="row mt-5 ">
-		
+
 				<div class=" mb-4">
 					<c:if test="${ ! empty error }">
 						<div class="alert alert-danger">${ error }</div>
@@ -60,7 +62,7 @@
 						<label for="montant_enchere" class="form-label">Meilleur
 							offre</label> <label for="montant_enchere" class="form-label">
 							par ${enchere.getUser().getPseudo()} :</label> <input type="number"
-							value="${enchere.getMontantEnchere()}"  readonly="readonly"
+							value="${enchere.getMontantEnchere()}" readonly="readonly"
 							class="form-control" name="montant_enchere" id="montant_enchere">
 					</div>
 					<div class="mb-3">
@@ -102,24 +104,41 @@
 							id="prix_initial">
 					</div>
 					<form action="" method="POST">
-						<div class="mb-3">
-							<label for="montantEnchere" class="form-label">Ma
-								proposition:</label> <input type="number" class="form-control"
-								name="montantEnchere" id="prix_initial">
-						</div>
+						<c:choose>
+							<c:when
+								test="${article.getEtatVente().contains('ET') && utilisateur.getNoUtilisateur() != article.getVendeur().getNoUtilisateur() }">
+
+								
+								
+									<button name="encherirOuModifier" value="encherir"
+										class="btn btn-primary offset-5" type="submit">Retrait
+										effectué</button>
+							
+							</c:when>
+							<c:when
+								test="${ utilisateur.getNoUtilisateur() != article.getVendeur().getNoUtilisateur()}">
+								<div class="mb-3">
+									<label for="montantEnchere" class="form-label">Ma
+										proposition:</label> <input type="number" class="form-control"
+										name="montantEnchere" id="prix_initial">
+								</div>
+								<button name="encherirOuModifier" value="encherir"
+									class="btn btn-primary offset-5" type="submit">Enchérir</button>
+							</c:when>
+
+						</c:choose>
+						<%-- 	<c:if
+							test="${article.getEtatVente().contains('ET') && utilisateur.getNoUtilisateur() != article.getVendeur().getNoUtilisateur() }">
+
+						</c:if> --%>
 						<c:if
-							test="${ utilisateur.getNoUtilisateur() != article.getVendeur().getNoUtilisateur()}">
-							<button name="encherirOuModifier" value="encherir"
-								class="btn btn-primary offset-5" type="submit">Enchérir</button>
+							test="${ enchere == null && utilisateur.getNoUtilisateur() == article.getVendeur().getNoUtilisateur()}">
+							<button name="encherirOuModifier" value="modifier"
+								class="btn btn-primary offset-5 mb-5 mt-2" role="button"
+								type="submit">Modifier</button>
 						</c:if>
-						<c:if
-						test="${ enchere == null && utilisateur.getNoUtilisateur() == article.getVendeur().getNoUtilisateur()}">
-						<button name="encherirOuModifier" value="modifier"
-							class="btn btn-primary offset-5 mb-5 mt-2" role="button"
-							type="submit">Modifier</button>
-					</c:if>
 					</form>
-					
+
 				</div>
 
 			</div>

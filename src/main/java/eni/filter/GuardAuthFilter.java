@@ -23,7 +23,8 @@ import java.io.IOException;
 				"/encheres/ajouter",
 				"/deconnexion",
 				"/profil",
-				"/vente/details"
+				"/vente/details",
+				"/modificationEnchere"
 		}
 		)
 public class GuardAuthFilter extends HttpFilter implements Filter {

@@ -32,7 +32,7 @@ private static UtilisateurManager instance;
 		checkFields(utilisateur);
 		utilisateur.setMotDePasse( PasswordEncoder.hashPassword(utilisateur.getMotDePasse()));
 		
-		utilisateur.setCredit(0);
+		utilisateur.setCredit(1000);
 		utilisateur.setAdministrateur(false);
 		utilisateurDao.save(utilisateur);		
 	}
