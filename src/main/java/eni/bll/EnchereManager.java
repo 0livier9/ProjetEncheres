@@ -36,14 +36,18 @@ public class EnchereManager {
 		Enchere ancienneEnchere = enchereDao.findOne(enchere.getArticle().getNoArticle());
 
 		if (ancienneEnchere == null) {
-			enchereDao.save(enchere);
+			if (enchere.getUser().getCredit() >= enchere.getMontantEnchere()) {
+				enchereDao.save(enchere);
+			}else {
+				throw new BLLException("Vous n'avez pas assez de crédit ");
+			}
+			
 		} else {
 			if (ancienneEnchere.getUser().getNoUtilisateur() == enchere.getUser().getNoUtilisateur()) {
 				throw new BLLException("Vous avez déjà la meilleur enchère");
 			}
 
-			if (enchere.getMontantEnchere() > ancienneEnchere.getMontantEnchere()
-					&& enchere.getUser().getCredit() >= enchere.getMontantEnchere()) {
+			if (enchere.getMontantEnchere() > ancienneEnchere.getMontantEnchere() && enchere.getUser().getCredit() >= enchere.getMontantEnchere()) {
 				int nouveauCredit = enchere.getUser().getCredit() - enchere.getMontantEnchere();
 				utilisateurDao.modifyCredit(nouveauCredit, enchere.getUser().getNoUtilisateur());
 				int majCredit = ancienneEnchere.getUser().getCredit() + ancienneEnchere.getMontantEnchere();
@@ -59,7 +63,6 @@ public class EnchereManager {
 				}
 			}
 		}
-
 	}
 
 	public Enchere trouverUneEnchere(int noArticle) {
